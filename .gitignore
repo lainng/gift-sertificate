@@ -1,2 +1,5 @@
 .idea
 gift-sertificate.iml
+.class
+.jar
+**/target
