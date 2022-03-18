@@ -27,7 +27,7 @@ public class TagDao extends AbstractDao<Tag> implements CRDDao<Tag> {
                         id
                 ).stream()
                 .findFirst()
-                .orElseThrow(DaoException::new);
+                .orElseThrow(() -> new DaoException("404001"));
     }
 
     @Override
