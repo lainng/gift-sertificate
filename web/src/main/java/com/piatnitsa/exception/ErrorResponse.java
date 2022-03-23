@@ -1,14 +1,14 @@
 package com.piatnitsa.exception;
 
 public class ErrorResponse {
-    private int errorCode;
+    private String errorCode;
     private String errorMessage;
 
-    public int getErrorCode() {
+    public String getErrorCode() {
         return errorCode;
     }
 
-    public void setErrorCode(int errorCode) {
+    public void setErrorCode(String errorCode) {
         this.errorCode = errorCode;
     }
 

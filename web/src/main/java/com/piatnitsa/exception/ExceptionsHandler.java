@@ -14,7 +14,7 @@ public class ExceptionsHandler {
     public final ResponseEntity<ErrorResponse> handleDaoExceptions(DaoException ex) {
         ErrorResponse errorResponse = new ErrorResponse();
         String details = Translator.toLocale(ex.getMessage());
-        errorResponse.setErrorCode(40401);
+        errorResponse.setErrorCode(ExceptionCodes.NOT_FOUND_EXCEPTION.toString());
         errorResponse.setErrorMessage(details);
         return new ResponseEntity<>(errorResponse, NOT_FOUND);
     }

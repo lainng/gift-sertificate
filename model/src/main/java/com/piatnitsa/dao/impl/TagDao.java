@@ -5,6 +5,7 @@ import com.piatnitsa.dao.CRDDao;
 import com.piatnitsa.dao.TagRowMapper;
 import com.piatnitsa.entity.Tag;
 import com.piatnitsa.exception.DaoException;
+import com.piatnitsa.exception.DaoExceptionMessageCodes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -27,7 +28,7 @@ public class TagDao extends AbstractDao<Tag> implements CRDDao<Tag> {
                         id
                 ).stream()
                 .findFirst()
-                .orElseThrow(() -> new DaoException("404001"));
+                .orElseThrow(() -> new DaoException(DaoExceptionMessageCodes.NO_ENTITY_WITH_ID));
     }
 
     @Override
