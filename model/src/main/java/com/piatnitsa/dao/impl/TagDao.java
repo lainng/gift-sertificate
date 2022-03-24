@@ -23,7 +23,7 @@ public class TagDao extends AbstractDao<Tag> implements CRDDao<Tag> {
     @Override
     public Tag getById(long id) throws DaoException {
         return jdbcTemplate.query(
-                        "select * from tag where tag_id = ?;",
+                        "select * from tag where id = ?;",
                         new TagRowMapper(),
                         id
                 ).stream()
@@ -42,7 +42,7 @@ public class TagDao extends AbstractDao<Tag> implements CRDDao<Tag> {
     @Override
     public void insert(Tag item) {
         jdbcTemplate.update(
-                "insert into tag(tag_name) values (?);",
+                "insert into tag(name) values (?);",
                 item.getName()
         );
     }
@@ -50,7 +50,7 @@ public class TagDao extends AbstractDao<Tag> implements CRDDao<Tag> {
     @Override
     public void removeById(long id) {
         jdbcTemplate.update(
-                "delete from tag where tag_id = ?;",
+                "delete from tag where id = ?;",
                 id
         );
     }
