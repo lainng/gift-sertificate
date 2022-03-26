@@ -1,4 +1,4 @@
-package com.piatnitsa.dao;
+package com.piatnitsa.dao.mapper;
 
 import com.piatnitsa.entity.Tag;
 import org.springframework.jdbc.core.RowMapper;
@@ -12,7 +12,7 @@ public class TagRowMapper implements RowMapper<Tag> {
     public Tag mapRow(ResultSet rs, int rowNum) throws SQLException {
         Tag tag = new Tag();
         tag.setId(rs.getLong("id"));
-        tag.setName(rs.getString("name"));
+        tag.setName(rs.getString("tag_name"));
         return tag;
     }
 }

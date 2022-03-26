@@ -2,7 +2,7 @@ package com.piatnitsa.dao.impl;
 
 import com.piatnitsa.dao.AbstractDao;
 import com.piatnitsa.dao.CRDDao;
-import com.piatnitsa.dao.TagRowMapper;
+import com.piatnitsa.dao.mapper.TagRowMapper;
 import com.piatnitsa.entity.Tag;
 import com.piatnitsa.exception.DaoException;
 import com.piatnitsa.exception.DaoExceptionMessageCodes;
@@ -42,7 +42,7 @@ public class TagDao extends AbstractDao<Tag> implements CRDDao<Tag> {
     @Override
     public void insert(Tag item) {
         jdbcTemplate.update(
-                "insert into tag(name) values (?);",
+                "insert into tag(tag_name) values (?);",
                 item.getName()
         );
     }
