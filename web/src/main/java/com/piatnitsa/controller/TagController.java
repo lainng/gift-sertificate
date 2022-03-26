@@ -29,14 +29,14 @@ public class TagController {
     }
 
     @PostMapping
-    public ResponseEntity<?> insert(@RequestBody Tag tag) {
+    public ResponseEntity<String> insert(@RequestBody Tag tag) {
         tagService.insert(tag);
         return ResponseEntity.status(HttpStatus.CREATED).body("Success");
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable long id) {
+    public ResponseEntity<Object> delete(@PathVariable long id) {
         tagService.removeById(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Success");
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
