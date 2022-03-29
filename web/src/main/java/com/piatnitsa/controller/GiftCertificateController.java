@@ -44,7 +44,7 @@ public class GiftCertificateController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<String> updateCertificate(@PathVariable long id,
-                                                    @RequestBody GiftCertificate certificate) {
+                                                    @RequestBody GiftCertificate certificate) throws DaoException {
         certificateService.update(id, certificate);
         return ResponseEntity.status(HttpStatus.CREATED).body("Success");
     }

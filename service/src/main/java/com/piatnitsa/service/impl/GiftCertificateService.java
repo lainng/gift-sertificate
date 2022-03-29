@@ -1,7 +1,9 @@
 package com.piatnitsa.service.impl;
 
 import com.piatnitsa.dao.impl.GiftCertificateDao;
+import com.piatnitsa.dao.impl.TagDao;
 import com.piatnitsa.entity.GiftCertificate;
+import com.piatnitsa.entity.Tag;
 import com.piatnitsa.exception.DaoException;
 import com.piatnitsa.service.CRUDService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,14 +11,17 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class GiftCertificateService implements CRUDService<GiftCertificate> {
     private final GiftCertificateDao certificateDao;
+    private final TagDao tagDao;
 
     @Autowired
-    public GiftCertificateService(GiftCertificateDao certificateDao) {
+    public GiftCertificateService(GiftCertificateDao certificateDao, TagDao tagDao) {
         this.certificateDao = certificateDao;
+        this.tagDao = tagDao;
     }
 
     @Override
@@ -34,6 +39,7 @@ public class GiftCertificateService implements CRUDService<GiftCertificate> {
         LocalDateTime dateTime = LocalDateTime.now();
         item.setCreateDate(dateTime.toString());
         item.setLastUpdateDate(dateTime.toString());
+        saveNewTags(item);
         certificateDao.insert(item);
     }
 
@@ -43,10 +49,29 @@ public class GiftCertificateService implements CRUDService<GiftCertificate> {
     }
 
     @Override
-    public void update(long id, GiftCertificate item) {
+    public void update(long id, GiftCertificate item) throws DaoException {
         LocalDateTime dateTime = LocalDateTime.now();
         item.setLastUpdateDate(dateTime.toString());
         item.setId(id);
+        saveNewTags(item);
         certificateDao.update(item);
+    }
+
+    private void saveNewTags(GiftCertificate item) {
+        List<Tag> allTags = tagDao.getAll();
+        List<Tag> requestTags = item.getTags();
+        for (Tag requestTag : requestTags) {
+            boolean isExist = false;
+            for (Tag tag : allTags) {
+                if (requestTag.getName().equalsIgnoreCase(tag.getName())) {
+                    isExist = true;
+                    break;
+                }
+            }
+
+            if (!isExist) {
+                tagDao.insert(requestTag);
+            }
+        }
     }
 }
