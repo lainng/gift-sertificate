@@ -31,6 +31,17 @@ public class TagDao extends AbstractDao<Tag> implements CRDDao<Tag> {
                 .orElseThrow(() -> new DaoException(DaoExceptionMessageCodes.NO_ENTITY_WITH_ID));
     }
 
+    public Tag getByName(String name) throws DaoException {
+        return jdbcTemplate.query(
+                "select * from tag where tag_name = ?;",
+                new TagRowMapper(),
+                name
+        ).stream()
+                .findFirst()
+                .orElseThrow(() -> new DaoException(DaoExceptionMessageCodes.NO_ENTITY_WITH_ID));
+    }
+
+
     @Override
     public List<Tag> getAll() {
         return jdbcTemplate.query(
