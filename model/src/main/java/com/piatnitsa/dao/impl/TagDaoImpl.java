@@ -2,6 +2,7 @@ package com.piatnitsa.dao.impl;
 
 import com.piatnitsa.dao.AbstractDao;
 import com.piatnitsa.dao.CRDDao;
+import com.piatnitsa.dao.TagDao;
 import com.piatnitsa.dao.mapper.TagRowMapper;
 import com.piatnitsa.entity.Tag;
 import com.piatnitsa.exception.DaoException;
@@ -13,10 +14,10 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class TagDao extends AbstractDao<Tag> implements CRDDao<Tag> {
+public class TagDaoImpl extends AbstractDao<Tag> implements TagDao {
 
     @Autowired
-    public TagDao(JdbcTemplate jdbcTemplate) {
+    public TagDaoImpl(JdbcTemplate jdbcTemplate) {
         super(jdbcTemplate);
     }
 
@@ -31,6 +32,7 @@ public class TagDao extends AbstractDao<Tag> implements CRDDao<Tag> {
                 .orElseThrow(() -> new DaoException(DaoExceptionMessageCodes.NO_ENTITY_WITH_ID));
     }
 
+    @Override
     public Tag getByName(String name) throws DaoException {
         return jdbcTemplate.query(
                 "select * from tag where tag_name = ?;",
