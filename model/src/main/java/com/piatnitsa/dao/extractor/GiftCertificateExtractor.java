@@ -14,8 +14,9 @@ public class GiftCertificateExtractor implements ResultSetExtractor<List<GiftCer
     @Override
     public List<GiftCertificate> extractData(ResultSet rs) throws SQLException, DataAccessException {
         List<GiftCertificate> certificates = new ArrayList<>();
-        rs.next();
-        while (!rs.isAfterLast()) {
+        boolean hasRows = rs.next();
+
+        while (hasRows && !rs.isAfterLast()) {
             GiftCertificate certificate = new GiftCertificate();
             certificate.setId(rs.getLong("id"));
             certificate.setName(rs.getString("name"));
