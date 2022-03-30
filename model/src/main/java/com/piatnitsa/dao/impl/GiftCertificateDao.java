@@ -10,8 +10,15 @@ import com.piatnitsa.exception.DaoException;
 import com.piatnitsa.exception.DaoExceptionMessageCodes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -47,16 +54,27 @@ public class GiftCertificateDao extends AbstractDao<GiftCertificate> implements 
     }
 
     @Override
-    public void insert(GiftCertificate item) {
+    public void insert(GiftCertificate item) throws DaoException {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(
-                "insert into gift_certificate(name, description, duration, create_date, last_update_date, price) values (?, ?, ?, ?, ?, ?);",
-                item.getName(),
-                item.getDescription(),
-                item.getDuration(),
-                item.getCreateDate(),
-                item.getLastUpdateDate(),
-                item.getPrice()
+                (connection) -> {
+                    PreparedStatement ps = connection.prepareStatement("insert into gift_certificate(name, description, duration, create_date, last_update_date, price) values (?, ?, ?, ?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
+                    ps.setString(1, item.getName());
+                    ps.setString(2, item.getDescription());
+                    ps.setInt(3, item.getDuration());
+                    ps.setString(4, item.getCreateDate());
+                    ps.setString(5, item.getLastUpdateDate());
+                    ps.setBigDecimal(6, item.getPrice());
+                    return ps;
+                },
+                keyHolder
         );
+        Integer newId = 0;
+        if (keyHolder.getKeys().size() > 1) {
+            newId = (Integer) keyHolder.getKeys().get("id");
+        }
+        item.setId(newId);
+        addNewTagsToCertificate(item);
     }
 
     @Override
@@ -112,6 +130,21 @@ public class GiftCertificateDao extends AbstractDao<GiftCertificate> implements 
                     "delete from gift_certificate_with_tags where gift_certificate_id = ? and tag_id = ?;",
                     item.getId(),
                     oldTag.getId()
+            );
+        }
+    }
+
+    private void addNewTagsToCertificate(GiftCertificate item) throws DaoException {
+        List<Tag> newTagsWithId = new ArrayList<>();
+        for (Tag requestTag : item.getTags()) {
+            Tag tagWithId = tagDao.getByName(requestTag.getName());
+            newTagsWithId.add(tagWithId);
+        }
+        for (Tag newTag : newTagsWithId) {
+            jdbcTemplate.update(
+                    "insert into gift_certificate_with_tags values (?, ?);",
+                    item.getId(),
+                    newTag.getId()
             );
         }
     }

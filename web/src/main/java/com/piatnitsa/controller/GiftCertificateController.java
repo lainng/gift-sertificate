@@ -31,7 +31,7 @@ public class GiftCertificateController {
     }
 
     @PostMapping
-    public ResponseEntity<String> createCertificate(@RequestBody GiftCertificate certificate) {
+    public ResponseEntity<String> createCertificate(@RequestBody GiftCertificate certificate) throws DaoException {
         certificateService.insert(certificate);
         return ResponseEntity.status(HttpStatus.CREATED).body("Success");
     }

@@ -35,7 +35,7 @@ public class GiftCertificateService implements CRUDService<GiftCertificate> {
     }
 
     @Override
-    public void insert(GiftCertificate item) {
+    public void insert(GiftCertificate item) throws DaoException {
         LocalDateTime dateTime = LocalDateTime.now();
         item.setCreateDate(dateTime.toString());
         item.setLastUpdateDate(dateTime.toString());
