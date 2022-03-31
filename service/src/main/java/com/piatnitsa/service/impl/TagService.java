@@ -1,6 +1,7 @@
 package com.piatnitsa.service.impl;
 
-import com.piatnitsa.dao.impl.TagDao;
+import com.piatnitsa.dao.TagDao;
+import com.piatnitsa.dao.impl.TagDaoImpl;
 import com.piatnitsa.entity.Tag;
 import com.piatnitsa.exception.DaoException;
 import com.piatnitsa.service.CRDService;
@@ -24,17 +25,17 @@ public class TagService implements CRDService<Tag> {
     }
 
     @Override
-    public List<Tag> getAll() {
+    public List<Tag> getAll() throws DaoException {
         return tagDao.getAll();
     }
 
     @Override
-    public void insert(Tag item) {
+    public void insert(Tag item) throws DaoException {
         tagDao.insert(item);
     }
 
     @Override
-    public void removeById(long id) {
+    public void removeById(long id) throws DaoException {
         tagDao.removeById(id);
     }
 }

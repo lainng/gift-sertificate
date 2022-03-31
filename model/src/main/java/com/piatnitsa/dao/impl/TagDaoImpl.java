@@ -1,9 +1,7 @@
 package com.piatnitsa.dao.impl;
 
 import com.piatnitsa.dao.AbstractDao;
-import com.piatnitsa.dao.CRDDao;
-import com.piatnitsa.dao.TagDao;
-import com.piatnitsa.dao.mapper.TagRowMapper;
+import com.piatnitsa.dao.extractor.TagExtractor;
 import com.piatnitsa.entity.Tag;
 import com.piatnitsa.exception.DaoException;
 import com.piatnitsa.exception.DaoExceptionMessageCodes;
@@ -14,7 +12,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class TagDaoImpl extends AbstractDao<Tag> implements TagDao {
+public class TagDaoImpl extends AbstractDao<Tag> implements com.piatnitsa.dao.TagDao {
 
     @Autowired
     public TagDaoImpl(JdbcTemplate jdbcTemplate) {
@@ -25,7 +23,7 @@ public class TagDaoImpl extends AbstractDao<Tag> implements TagDao {
     public Tag getById(long id) throws DaoException {
         return jdbcTemplate.query(
                         "select * from tag where id = ?;",
-                        new TagRowMapper(),
+                        new TagExtractor(),
                         id
                 ).stream()
                 .findFirst()
@@ -36,7 +34,7 @@ public class TagDaoImpl extends AbstractDao<Tag> implements TagDao {
     public Tag getByName(String name) throws DaoException {
         return jdbcTemplate.query(
                 "select * from tag where tag_name = ?;",
-                new TagRowMapper(),
+                new TagExtractor(),
                 name
         ).stream()
                 .findFirst()
@@ -48,7 +46,7 @@ public class TagDaoImpl extends AbstractDao<Tag> implements TagDao {
     public List<Tag> getAll() {
         return jdbcTemplate.query(
                 "select * from tag;",
-                new TagRowMapper()
+                new TagExtractor()
         );
     }
 
