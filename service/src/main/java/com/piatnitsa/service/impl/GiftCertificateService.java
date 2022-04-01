@@ -1,7 +1,7 @@
 package com.piatnitsa.service.impl;
 
 import com.piatnitsa.dao.impl.GiftCertificateDao;
-import com.piatnitsa.dao.impl.TagDao;
+import com.piatnitsa.dao.impl.TagDaoImpl;
 import com.piatnitsa.entity.GiftCertificate;
 import com.piatnitsa.entity.Tag;
 import com.piatnitsa.exception.DaoException;
@@ -11,15 +11,14 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class GiftCertificateService implements CRUDService<GiftCertificate> {
     private final GiftCertificateDao certificateDao;
-    private final TagDao tagDao;
+    private final TagDaoImpl tagDao;
 
     @Autowired
-    public GiftCertificateService(GiftCertificateDao certificateDao, TagDao tagDao) {
+    public GiftCertificateService(GiftCertificateDao certificateDao, TagDaoImpl tagDao) {
         this.certificateDao = certificateDao;
         this.tagDao = tagDao;
     }
