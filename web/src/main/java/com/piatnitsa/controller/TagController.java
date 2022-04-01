@@ -19,7 +19,7 @@ public class TagController {
     }
 
     @GetMapping
-    public List<Tag> allTags() {
+    public List<Tag> allTags() throws DaoException {
         return tagService.getAll();
     }
 
@@ -29,13 +29,13 @@ public class TagController {
     }
 
     @PostMapping
-    public ResponseEntity<String> insert(@RequestBody Tag tag) {
+    public ResponseEntity<String> insert(@RequestBody Tag tag) throws DaoException {
         tagService.insert(tag);
         return ResponseEntity.status(HttpStatus.CREATED).body("Success");
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> delete(@PathVariable long id) {
+    public ResponseEntity<Object> delete(@PathVariable long id) throws DaoException {
         tagService.removeById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
