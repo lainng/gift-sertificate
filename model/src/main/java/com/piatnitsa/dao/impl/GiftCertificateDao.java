@@ -2,17 +2,14 @@ package com.piatnitsa.dao.impl;
 
 import com.piatnitsa.dao.AbstractDao;
 import com.piatnitsa.dao.CRUDDao;
+import com.piatnitsa.dao.TagDao;
 import com.piatnitsa.dao.extractor.GiftCertificateExtractor;
 import com.piatnitsa.dao.extractor.GiftCertificateFieldExtractor;
 import com.piatnitsa.entity.GiftCertificate;
 import com.piatnitsa.entity.Tag;
 import com.piatnitsa.exception.DaoException;
-import com.piatnitsa.exception.DaoExceptionMessageCodes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
@@ -26,31 +23,29 @@ import java.util.Set;
 
 @Component
 public class GiftCertificateDao extends AbstractDao<GiftCertificate> implements CRUDDao<GiftCertificate> {
+    private static final String QUERY_SELECT_BY_ID = "select * from gift_certificate gc left join gift_certificate_with_tags gcwt on gc.id = gcwt.gift_certificate_id left join tag t on t.id = gcwt.tag_id where gc.id = ?;";
+    private static final String QUERY_SELECT_ALL_CERTIFICATES = "select * from gift_certificate gc left join gift_certificate_with_tags gcwt on gc.id = gcwt.gift_certificate_id left join tag t on t.id = gcwt.tag_id;";
+    private static final String QUERY_DELETE_BY_ID = "delete from gift_certificate where id = ?;";
+    private static final String QUERY_INSERT_NEW_TAGS_TO_CERTIFICATE = "insert into gift_certificate_with_tags values (?, ?);";
+    private static final String QUERY_DELETE_OLD_TAGS_FROM_CERTIFICATE = "delete from gift_certificate_with_tags where gift_certificate_id = ? and tag_id = ?;";
     private final TagDao tagDao;
 
     @Autowired
-    public GiftCertificateDao(JdbcTemplate jdbcTemplate, TagDao tagDao) {
-        super(jdbcTemplate);
+    public GiftCertificateDao(JdbcTemplate jdbcTemplate,
+                              TagDao tagDao,
+                              GiftCertificateExtractor giftCertificateExtractor) {
+        super(jdbcTemplate, giftCertificateExtractor);
         this.tagDao = tagDao;
     }
 
     @Override
     public GiftCertificate getById(long id) throws DaoException {
-        return jdbcTemplate.query(
-                "select * from gift_certificate gc left join gift_certificate_with_tags gcwt on gc.id = gcwt.gift_certificate_id left join tag t on t.id = gcwt.tag_id where gc.id = ?;",
-                new GiftCertificateExtractor(),
-                id
-        ).stream()
-                .findFirst()
-                .orElseThrow(() -> new DaoException(DaoExceptionMessageCodes.NO_ENTITY_WITH_ID));
+        return executeQueryAsSimpleEntity(QUERY_SELECT_BY_ID, id);
     }
 
     @Override
     public List<GiftCertificate> getAll() {
-        return jdbcTemplate.query(
-                "select * from gift_certificate gc left join gift_certificate_with_tags gcwt on gc.id = gcwt.gift_certificate_id left join tag t on t.id = gcwt.tag_id;",
-                new GiftCertificateExtractor()
-        );
+        return executeQuery(QUERY_SELECT_ALL_CERTIFICATES);
     }
 
     @Override
@@ -79,14 +74,16 @@ public class GiftCertificateDao extends AbstractDao<GiftCertificate> implements 
 
     @Override
     public void removeById(long id) {
-        jdbcTemplate.update(
-                "delete from gift_certificate where id = ?;",
-                id
-        );
+        executeUpdateQuery(QUERY_DELETE_BY_ID, id);
     }
 
     @Override
     public void update(GiftCertificate item) throws DaoException {
+        executeQuery(buildUpdateQuery(item));
+        updateCertificateTags(item);
+    }
+
+    private String buildUpdateQuery(GiftCertificate item) {
         StringBuilder updateQuery = new StringBuilder("update gift_certificate set ");
         GiftCertificateFieldExtractor extractor = new GiftCertificateFieldExtractor();
 
@@ -100,34 +97,30 @@ public class GiftCertificateDao extends AbstractDao<GiftCertificate> implements 
         }
         updateQuery.deleteCharAt(updateQuery.length() - 2);
         updateQuery.append(" where id=").append(item.getId());
-        jdbcTemplate.update(updateQuery.toString());
 
-        updateCertificateTags(item);
+        return updateQuery.toString();
     }
 
     private void updateCertificateTags(GiftCertificate item) throws DaoException {
-        List<Tag> newTagsWithId = new ArrayList<>();
-        for (Tag requestTag : item.getTags()) {
-            Tag tagWithId = tagDao.getByName(requestTag.getName());
-            newTagsWithId.add(tagWithId);
-        }
+        List<Tag> newTags = createTagsWithId(item.getTags());
         GiftCertificate certificateFromDB = getById(item.getId());
-        List<Tag> oldTags = certificateFromDB.getTags();
-        List<Tag> tempList = new ArrayList<>(newTagsWithId);
-        newTagsWithId.removeAll(oldTags);
-        oldTags.removeAll(tempList);
 
-        for (Tag newTag : newTagsWithId) {
-            jdbcTemplate.update(
-                    "insert into gift_certificate_with_tags values (?, ?);",
+        List<Tag> oldTags = certificateFromDB.getTags();
+        List<Tag> newTagsTempList = new ArrayList<>(newTags);
+        newTags.removeAll(oldTags);
+        oldTags.removeAll(newTagsTempList);
+
+        for (Tag newTag : newTags) {
+            executeUpdateQuery(
+                    QUERY_INSERT_NEW_TAGS_TO_CERTIFICATE,
                     item.getId(),
                     newTag.getId()
             );
         }
 
         for (Tag oldTag : oldTags) {
-            jdbcTemplate.update(
-                    "delete from gift_certificate_with_tags where gift_certificate_id = ? and tag_id = ?;",
+            executeUpdateQuery(
+                    QUERY_DELETE_OLD_TAGS_FROM_CERTIFICATE,
                     item.getId(),
                     oldTag.getId()
             );
@@ -135,17 +128,22 @@ public class GiftCertificateDao extends AbstractDao<GiftCertificate> implements 
     }
 
     private void addNewTagsToCertificate(GiftCertificate item) throws DaoException {
-        List<Tag> newTagsWithId = new ArrayList<>();
-        for (Tag requestTag : item.getTags()) {
-            Tag tagWithId = tagDao.getByName(requestTag.getName());
-            newTagsWithId.add(tagWithId);
-        }
-        for (Tag newTag : newTagsWithId) {
-            jdbcTemplate.update(
-                    "insert into gift_certificate_with_tags values (?, ?);",
+        List<Tag> newTags = createTagsWithId(item.getTags());
+        for (Tag newTag : newTags) {
+            executeUpdateQuery(
+                    QUERY_INSERT_NEW_TAGS_TO_CERTIFICATE,
                     item.getId(),
                     newTag.getId()
             );
         }
+    }
+
+    private List<Tag> createTagsWithId(List<Tag> requestTags) throws DaoException {
+        List<Tag> newTagsWithId = new ArrayList<>(requestTags.size());
+        for (Tag requestTag : requestTags) {
+            Tag tagWithId = tagDao.getByName(requestTag.getName());
+            newTagsWithId.add(tagWithId);
+        }
+        return newTagsWithId;
     }
 }
