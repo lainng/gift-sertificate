@@ -28,20 +28,20 @@ public class TagDaoImpl extends AbstractDao<Tag> implements TagDao {
 
     @Override
     public Tag getById(long id) throws DaoException {
-        try {
-            return executeQueryAsSimpleEntity(QUERY_SELECT_BY_ID, id);
-        } catch (DataAccessException e) {
+        Tag item = executeQueryAsSimpleEntity(QUERY_SELECT_BY_ID, id);
+        if (item == null) {
             throw new DaoException(DaoExceptionMessageCodes.NO_ENTITY_WITH_ID);
         }
+        return item;
     }
 
     @Override
     public Tag getByName(String name) throws DaoException {
-        try {
-            return executeQueryAsSimpleEntity(QUERY_SELECT_BY_NAME, name);
-        } catch (DataAccessException e) {
+        Tag item = executeQueryAsSimpleEntity(QUERY_SELECT_BY_NAME, name);
+        if (item == null) {
             throw new DaoException(DaoExceptionMessageCodes.NO_ENTITY_WITH_NAME);
         }
+        return item;
     }
 
     @Override
@@ -50,20 +50,12 @@ public class TagDaoImpl extends AbstractDao<Tag> implements TagDao {
     }
 
     @Override
-    public void insert(Tag item) throws DaoException {
-        try {
-            executeUpdateQuery(QUERY_INSERT_TAG, item.getName());
-        } catch (DataAccessException e) {
-            throw new DaoException(DaoExceptionMessageCodes.SAVING_ERROR);
-        }
+    public void insert(Tag item) {
+        executeUpdateQuery(QUERY_INSERT_TAG, item.getName());
     }
 
     @Override
-    public void removeById(long id) throws DaoException {
-        try {
-            executeUpdateQuery(QUERY_DELETE_BY_ID, id);
-        } catch (DataAccessException e) {
-            throw new DaoException(DaoExceptionMessageCodes.NO_ENTITY_WITH_ID);
-        }
+    public void removeById(long id) {
+        executeUpdateQuery(QUERY_DELETE_BY_ID, id);
     }
 }

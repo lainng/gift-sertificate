@@ -43,11 +43,11 @@ public class GiftCertificateDaoImpl extends AbstractDao<GiftCertificate> impleme
 
     @Override
     public GiftCertificate getById(long id) throws DaoException {
-        try {
-            return executeQueryAsSimpleEntity(QUERY_SELECT_BY_ID, id);
-        } catch (DataAccessException e) {
+        GiftCertificate item = executeQueryAsSimpleEntity(QUERY_SELECT_BY_ID, id);
+        if (item == null) {
             throw new DaoException(DaoExceptionMessageCodes.NO_ENTITY_WITH_ID);
         }
+        return item;
     }
 
     @Override
@@ -58,26 +58,21 @@ public class GiftCertificateDaoImpl extends AbstractDao<GiftCertificate> impleme
     @Override
     public void insert(GiftCertificate item) throws DaoException {
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        try {
-            jdbcTemplate.update(
-                    (connection) -> {
-                        PreparedStatement ps = connection.prepareStatement(
-                                QUERY_INSERT_NEW_CERTIFICATE,
-                                Statement.RETURN_GENERATED_KEYS
-                        );
-                        ps.setString(1, item.getName());
-                        ps.setString(2, item.getDescription());
-                        ps.setInt(3, item.getDuration());
-                        ps.setString(4, item.getCreateDate());
-                        ps.setString(5, item.getLastUpdateDate());
-                        ps.setBigDecimal(6, item.getPrice());
-                        return ps;
-                    },
-                    keyHolder
-            );
-        } catch (DataAccessException e) {
-            throw new DaoException(DaoExceptionMessageCodes.SAVING_ERROR);
-        }
+        jdbcTemplate.update(
+                (connection) -> {
+                    PreparedStatement ps = connection.prepareStatement(
+                            QUERY_INSERT_NEW_CERTIFICATE,
+                            Statement.RETURN_GENERATED_KEYS);
+                    ps.setString(1, item.getName());
+                    ps.setString(2, item.getDescription());
+                    ps.setInt(3, item.getDuration());
+                    ps.setString(4, item.getCreateDate());
+                    ps.setString(5, item.getLastUpdateDate());
+                    ps.setBigDecimal(6, item.getPrice());
+                    return ps;
+                },
+                keyHolder
+        );
         Integer newId;
         if (keyHolder.getKeys().size() > 1) {
             newId = (Integer) keyHolder.getKeys().get("id");
@@ -89,22 +84,14 @@ public class GiftCertificateDaoImpl extends AbstractDao<GiftCertificate> impleme
     }
 
     @Override
-    public void removeById(long id) throws DaoException {
-        try {
-            executeUpdateQuery(QUERY_DELETE_BY_ID, id);
-        } catch (DataAccessException e) {
-            throw new DaoException(DaoExceptionMessageCodes.NO_ENTITY_WITH_ID);
-        }
+    public void removeById(long id) {
+        executeUpdateQuery(QUERY_DELETE_BY_ID, id);
     }
 
     @Override
     public void update(GiftCertificate item) throws DaoException {
-        try {
-            executeUpdateQuery(buildUpdateQuery(item));
-            updateCertificateTags(item);
-        } catch (DataAccessException e) {
-            throw new DaoException(DaoExceptionMessageCodes.NO_ENTITY_WITH_ID);
-        }
+        executeUpdateQuery(buildUpdateQuery(item));
+        updateCertificateTags(item);
     }
 
     private String buildUpdateQuery(GiftCertificate item) {

@@ -1,5 +1,7 @@
 package com.piatnitsa.dao;
 
+import com.piatnitsa.exception.DaoException;
+import com.piatnitsa.exception.DaoExceptionMessageCodes;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 
@@ -16,6 +18,9 @@ public abstract class AbstractDao<T> {
 
     public T executeQueryAsSimpleEntity(String query, Object... params) {
         List<T> items = executeQuery(query, params);
+        if (items == null || items.size() == 0) {
+            return null;
+        }
         return items.get(0);
     }
 
