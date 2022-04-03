@@ -43,7 +43,11 @@ public class GiftCertificateDaoImpl extends AbstractDao<GiftCertificate> impleme
 
     @Override
     public GiftCertificate getById(long id) throws DaoException {
-        return executeQueryAsSimpleEntity(QUERY_SELECT_BY_ID, id);
+        try {
+            return executeQueryAsSimpleEntity(QUERY_SELECT_BY_ID, id);
+        } catch (DataAccessException e) {
+            throw new DaoException(DaoExceptionMessageCodes.NO_ENTITY_WITH_ID);
+        }
     }
 
     @Override
@@ -89,7 +93,7 @@ public class GiftCertificateDaoImpl extends AbstractDao<GiftCertificate> impleme
         try {
             executeUpdateQuery(QUERY_DELETE_BY_ID, id);
         } catch (DataAccessException e) {
-            throw new DaoException(DaoExceptionMessageCodes.SAVING_ERROR);
+            throw new DaoException(DaoExceptionMessageCodes.NO_ENTITY_WITH_ID);
         }
     }
 
