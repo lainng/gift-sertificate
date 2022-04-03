@@ -28,6 +28,7 @@ public class GiftCertificateDao extends AbstractDao<GiftCertificate> implements 
     private static final String QUERY_DELETE_BY_ID = "delete from gift_certificate where id = ?;";
     private static final String QUERY_INSERT_NEW_TAGS_TO_CERTIFICATE = "insert into gift_certificate_with_tags values (?, ?);";
     private static final String QUERY_DELETE_OLD_TAGS_FROM_CERTIFICATE = "delete from gift_certificate_with_tags where gift_certificate_id = ? and tag_id = ?;";
+    private static final String QUERY_INSERT_NEW_CERTIFICATE = "insert into gift_certificate(name, description, duration, create_date, last_update_date, price) values (?, ?, ?, ?, ?, ?);";
     private final TagDao tagDao;
 
     @Autowired
@@ -53,7 +54,10 @@ public class GiftCertificateDao extends AbstractDao<GiftCertificate> implements 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(
                 (connection) -> {
-                    PreparedStatement ps = connection.prepareStatement("insert into gift_certificate(name, description, duration, create_date, last_update_date, price) values (?, ?, ?, ?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
+                    PreparedStatement ps = connection.prepareStatement(
+                            QUERY_INSERT_NEW_CERTIFICATE,
+                            Statement.RETURN_GENERATED_KEYS
+                    );
                     ps.setString(1, item.getName());
                     ps.setString(2, item.getDescription());
                     ps.setInt(3, item.getDuration());
@@ -64,9 +68,11 @@ public class GiftCertificateDao extends AbstractDao<GiftCertificate> implements 
                 },
                 keyHolder
         );
-        Integer newId = 0;
+        Integer newId;
         if (keyHolder.getKeys().size() > 1) {
             newId = (Integer) keyHolder.getKeys().get("id");
+        } else {
+            newId = keyHolder.getKey().intValue();
         }
         item.setId(newId);
         addNewTagsToCertificate(item);
@@ -110,21 +116,21 @@ public class GiftCertificateDao extends AbstractDao<GiftCertificate> implements 
         newTags.removeAll(oldTags);
         oldTags.removeAll(newTagsTempList);
 
-        for (Tag newTag : newTags) {
-            executeUpdateQuery(
+        newTags.forEach((newTag) ->
+                executeUpdateQuery(
                     QUERY_INSERT_NEW_TAGS_TO_CERTIFICATE,
                     item.getId(),
                     newTag.getId()
-            );
-        }
+                )
+        );
 
-        for (Tag oldTag : oldTags) {
-            executeUpdateQuery(
-                    QUERY_DELETE_OLD_TAGS_FROM_CERTIFICATE,
-                    item.getId(),
-                    oldTag.getId()
-            );
-        }
+        oldTags.forEach((oldTag) ->
+                executeUpdateQuery(
+                        QUERY_DELETE_OLD_TAGS_FROM_CERTIFICATE,
+                        item.getId(),
+                        oldTag.getId()
+                )
+        );
     }
 
     private void addNewTagsToCertificate(GiftCertificate item) throws DaoException {
