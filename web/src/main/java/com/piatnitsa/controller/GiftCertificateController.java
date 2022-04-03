@@ -37,7 +37,7 @@ public class GiftCertificateController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteCertificateById(@PathVariable long id) throws DaoException {
+    public ResponseEntity<Object> deleteCertificateById(@PathVariable long id) {
         certificateService.removeById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

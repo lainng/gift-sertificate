@@ -1,7 +1,6 @@
 package com.piatnitsa.service.impl;
 
 import com.piatnitsa.dao.TagDao;
-import com.piatnitsa.dao.impl.TagDaoImpl;
 import com.piatnitsa.entity.Tag;
 import com.piatnitsa.exception.DaoException;
 import com.piatnitsa.service.CRDService;

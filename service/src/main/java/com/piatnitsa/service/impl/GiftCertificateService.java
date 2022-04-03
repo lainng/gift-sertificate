@@ -43,7 +43,7 @@ public class GiftCertificateService implements CRUDService<GiftCertificate> {
     }
 
     @Override
-    public void removeById(long id) throws DaoException {
+    public void removeById(long id) {
         certificateDao.removeById(id);
     }
 
@@ -56,7 +56,7 @@ public class GiftCertificateService implements CRUDService<GiftCertificate> {
         certificateDao.update(item);
     }
 
-    private void saveNewTags(GiftCertificate item) throws DaoException {
+    private void saveNewTags(GiftCertificate item) {
         List<Tag> allTags = tagDao.getAll();
         List<Tag> requestTags = item.getTags();
         for (Tag requestTag : requestTags) {
