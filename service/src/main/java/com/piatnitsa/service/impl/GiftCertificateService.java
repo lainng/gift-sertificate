@@ -56,7 +56,7 @@ public class GiftCertificateService implements CRUDService<GiftCertificate> {
         certificateDao.update(item);
     }
 
-    private void saveNewTags(GiftCertificate item) {
+    private void saveNewTags(GiftCertificate item) throws DaoException {
         List<Tag> allTags = tagDao.getAll();
         List<Tag> requestTags = item.getTags();
         for (Tag requestTag : requestTags) {
