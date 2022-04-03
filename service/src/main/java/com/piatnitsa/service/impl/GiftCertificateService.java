@@ -1,6 +1,6 @@
 package com.piatnitsa.service.impl;
 
-import com.piatnitsa.dao.impl.GiftCertificateDao;
+import com.piatnitsa.dao.impl.GiftCertificateDaoImpl;
 import com.piatnitsa.dao.impl.TagDaoImpl;
 import com.piatnitsa.entity.GiftCertificate;
 import com.piatnitsa.entity.Tag;
@@ -14,11 +14,11 @@ import java.util.List;
 
 @Service
 public class GiftCertificateService implements CRUDService<GiftCertificate> {
-    private final GiftCertificateDao certificateDao;
+    private final GiftCertificateDaoImpl certificateDao;
     private final TagDaoImpl tagDao;
 
     @Autowired
-    public GiftCertificateService(GiftCertificateDao certificateDao, TagDaoImpl tagDao) {
+    public GiftCertificateService(GiftCertificateDaoImpl certificateDao, TagDaoImpl tagDao) {
         this.certificateDao = certificateDao;
         this.tagDao = tagDao;
     }
