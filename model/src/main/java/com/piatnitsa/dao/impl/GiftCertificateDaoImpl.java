@@ -8,7 +8,9 @@ import com.piatnitsa.dao.extractor.GiftCertificateFieldExtractor;
 import com.piatnitsa.entity.GiftCertificate;
 import com.piatnitsa.entity.Tag;
 import com.piatnitsa.exception.DaoException;
+import com.piatnitsa.exception.DaoExceptionMessageCodes;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -52,22 +54,26 @@ public class GiftCertificateDaoImpl extends AbstractDao<GiftCertificate> impleme
     @Override
     public void insert(GiftCertificate item) throws DaoException {
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbcTemplate.update(
-                (connection) -> {
-                    PreparedStatement ps = connection.prepareStatement(
-                            QUERY_INSERT_NEW_CERTIFICATE,
-                            Statement.RETURN_GENERATED_KEYS
-                    );
-                    ps.setString(1, item.getName());
-                    ps.setString(2, item.getDescription());
-                    ps.setInt(3, item.getDuration());
-                    ps.setString(4, item.getCreateDate());
-                    ps.setString(5, item.getLastUpdateDate());
-                    ps.setBigDecimal(6, item.getPrice());
-                    return ps;
-                },
-                keyHolder
-        );
+        try {
+            jdbcTemplate.update(
+                    (connection) -> {
+                        PreparedStatement ps = connection.prepareStatement(
+                                QUERY_INSERT_NEW_CERTIFICATE,
+                                Statement.RETURN_GENERATED_KEYS
+                        );
+                        ps.setString(1, item.getName());
+                        ps.setString(2, item.getDescription());
+                        ps.setInt(3, item.getDuration());
+                        ps.setString(4, item.getCreateDate());
+                        ps.setString(5, item.getLastUpdateDate());
+                        ps.setBigDecimal(6, item.getPrice());
+                        return ps;
+                    },
+                    keyHolder
+            );
+        } catch (DataAccessException e) {
+            throw new DaoException(DaoExceptionMessageCodes.SAVING_ERROR);
+        }
         Integer newId;
         if (keyHolder.getKeys().size() > 1) {
             newId = (Integer) keyHolder.getKeys().get("id");
@@ -79,14 +85,22 @@ public class GiftCertificateDaoImpl extends AbstractDao<GiftCertificate> impleme
     }
 
     @Override
-    public void removeById(long id) {
-        executeUpdateQuery(QUERY_DELETE_BY_ID, id);
+    public void removeById(long id) throws DaoException {
+        try {
+            executeUpdateQuery(QUERY_DELETE_BY_ID, id);
+        } catch (DataAccessException e) {
+            throw new DaoException(DaoExceptionMessageCodes.SAVING_ERROR);
+        }
     }
 
     @Override
     public void update(GiftCertificate item) throws DaoException {
-        executeQuery(buildUpdateQuery(item));
-        updateCertificateTags(item);
+        try {
+            executeUpdateQuery(buildUpdateQuery(item));
+            updateCertificateTags(item);
+        } catch (DataAccessException e) {
+            throw new DaoException(DaoExceptionMessageCodes.NO_ENTITY_WITH_ID);
+        }
     }
 
     private String buildUpdateQuery(GiftCertificate item) {
