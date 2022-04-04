@@ -43,7 +43,7 @@ public class GiftCertificateService implements CRUDService<GiftCertificate> {
     }
 
     @Override
-    public void removeById(long id) {
+    public void removeById(long id) throws DaoException {
         certificateDao.removeById(id);
     }
 

@@ -34,7 +34,7 @@ public class TagService implements CRDService<Tag> {
     }
 
     @Override
-    public void removeById(long id) {
+    public void removeById(long id) throws DaoException {
         tagDao.removeById(id);
     }
 }

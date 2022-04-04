@@ -26,7 +26,7 @@ public abstract class AbstractDao<T> {
         return jdbcTemplate.query(query, resultSetExtractor, params);
     }
 
-    public void executeUpdateQuery(String query, Object... params) {
-        jdbcTemplate.update(query, params);
+    public int executeUpdateQuery(String query, Object... params) {
+        return jdbcTemplate.update(query, params);
     }
 }

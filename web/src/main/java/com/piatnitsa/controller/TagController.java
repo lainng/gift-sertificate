@@ -19,7 +19,7 @@ public class TagController {
     }
 
     @GetMapping
-    public List<Tag> allTags() throws DaoException {
+    public List<Tag> allTags() {
         return tagService.getAll();
     }
 

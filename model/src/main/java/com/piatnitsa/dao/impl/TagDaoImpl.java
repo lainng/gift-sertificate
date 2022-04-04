@@ -54,7 +54,10 @@ public class TagDaoImpl extends AbstractDao<Tag> implements TagDao {
     }
 
     @Override
-    public void removeById(long id) {
-        executeUpdateQuery(QUERY_DELETE_BY_ID, id);
+    public void removeById(long id) throws DaoException {
+        int affectedRows = executeUpdateQuery(QUERY_DELETE_BY_ID, id);
+        if (affectedRows == 0) {
+            throw new DaoException(DaoExceptionMessageCodes.NO_ENTITY_WITH_ID);
+        }
     }
 }

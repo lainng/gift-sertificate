@@ -8,5 +8,5 @@ public interface CRDDao<T> {
     T getById(long id) throws DaoException;
     List<T> getAll();
     void insert(T item) throws DaoException;
-    void removeById(long id);
+    void removeById(long id) throws DaoException;
 }
