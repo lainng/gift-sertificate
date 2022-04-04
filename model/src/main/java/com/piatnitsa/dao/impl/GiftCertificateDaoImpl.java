@@ -10,7 +10,6 @@ import com.piatnitsa.entity.Tag;
 import com.piatnitsa.exception.DaoException;
 import com.piatnitsa.exception.DaoExceptionMessageCodes;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -43,7 +42,7 @@ public class GiftCertificateDaoImpl extends AbstractDao<GiftCertificate> impleme
 
     @Override
     public GiftCertificate getById(long id) throws DaoException {
-        GiftCertificate item = executeQueryAsSimpleEntity(QUERY_SELECT_BY_ID, id);
+        GiftCertificate item = executeQueryAsSingleEntity(QUERY_SELECT_BY_ID, id);
         if (item == null) {
             throw new DaoException(DaoExceptionMessageCodes.NO_ENTITY_WITH_ID);
         }

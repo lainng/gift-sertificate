@@ -7,7 +7,6 @@ import com.piatnitsa.entity.Tag;
 import com.piatnitsa.exception.DaoException;
 import com.piatnitsa.exception.DaoExceptionMessageCodes;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
@@ -28,7 +27,7 @@ public class TagDaoImpl extends AbstractDao<Tag> implements TagDao {
 
     @Override
     public Tag getById(long id) throws DaoException {
-        Tag item = executeQueryAsSimpleEntity(QUERY_SELECT_BY_ID, id);
+        Tag item = executeQueryAsSingleEntity(QUERY_SELECT_BY_ID, id);
         if (item == null) {
             throw new DaoException(DaoExceptionMessageCodes.NO_ENTITY_WITH_ID);
         }
@@ -37,7 +36,7 @@ public class TagDaoImpl extends AbstractDao<Tag> implements TagDao {
 
     @Override
     public Tag getByName(String name) throws DaoException {
-        Tag item = executeQueryAsSimpleEntity(QUERY_SELECT_BY_NAME, name);
+        Tag item = executeQueryAsSingleEntity(QUERY_SELECT_BY_NAME, name);
         if (item == null) {
             throw new DaoException(DaoExceptionMessageCodes.NO_ENTITY_WITH_NAME);
         }
