@@ -1,6 +1,7 @@
 package com.piatnitsa.dao.impl;
 
 import com.piatnitsa.dao.AbstractDao;
+import com.piatnitsa.dao.QueryBuilder;
 import com.piatnitsa.dao.TagDao;
 import com.piatnitsa.dao.extractor.TagExtractor;
 import com.piatnitsa.entity.Tag;
@@ -11,12 +12,13 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class TagDaoImpl extends AbstractDao<Tag> implements TagDao {
     private static final String QUERY_SELECT_BY_ID = "select * from tag where id = ?;";
     private static final String QUERY_SELECT_BY_NAME = "select * from tag where tag_name = ?;";
-    private static final String QUERY_SELECT_ALL_TAGS = "select * from tag;";
+    private static final String QUERY_SELECT_ALL_TAGS = "select * from tag ";
     private static final String QUERY_INSERT_TAG = "insert into tag(tag_name) values (?);";
     private static final String QUERY_DELETE_BY_ID = "delete from tag where id = ?;";
 
@@ -41,6 +43,16 @@ public class TagDaoImpl extends AbstractDao<Tag> implements TagDao {
             throw new DaoException(DaoExceptionMessageCodes.NO_ENTITY_WITH_NAME);
         }
         return item;
+    }
+
+    @Override
+    public List<Tag> getWithFilter(Map<String, String> params) throws DaoException {
+        QueryBuilder queryBuilder = new QueryBuilder();
+        String getQuery = queryBuilder.buildParametrizedQuery(QUERY_SELECT_ALL_TAGS, params);
+        return jdbcTemplate.query(
+                getQuery,
+                resultSetExtractor
+        );
     }
 
     @Override

@@ -1,24 +1,26 @@
 package com.piatnitsa.service.impl;
 
+import com.piatnitsa.dao.TagDao;
 import com.piatnitsa.dao.impl.GiftCertificateDaoImpl;
-import com.piatnitsa.dao.impl.TagDaoImpl;
 import com.piatnitsa.entity.GiftCertificate;
 import com.piatnitsa.entity.Tag;
 import com.piatnitsa.exception.DaoException;
 import com.piatnitsa.service.CRUDService;
+import com.piatnitsa.service.GiftCertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Service
-public class GiftCertificateService implements CRUDService<GiftCertificate> {
+public class GiftCertificateServiceImpl implements GiftCertificateService {
     private final GiftCertificateDaoImpl certificateDao;
-    private final TagDaoImpl tagDao;
+    private final TagDao tagDao;
 
     @Autowired
-    public GiftCertificateService(GiftCertificateDaoImpl certificateDao, TagDaoImpl tagDao) {
+    public GiftCertificateServiceImpl(GiftCertificateDaoImpl certificateDao, TagDao tagDao) {
         this.certificateDao = certificateDao;
         this.tagDao = tagDao;
     }
@@ -56,7 +58,12 @@ public class GiftCertificateService implements CRUDService<GiftCertificate> {
         certificateDao.update(item);
     }
 
-    private void saveNewTags(GiftCertificate item) {
+    @Override
+    public List<GiftCertificate> doFilter(Map<String, String> params) throws DaoException {
+        return certificateDao.getWithFilter(params);
+    }
+
+    private void saveNewTags(GiftCertificate item) throws DaoException {
         List<Tag> allTags = tagDao.getAll();
         List<Tag> requestTags = item.getTags();
         for (Tag requestTag : requestTags) {

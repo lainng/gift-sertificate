@@ -2,12 +2,13 @@ package com.piatnitsa.controller;
 
 import com.piatnitsa.entity.Tag;
 import com.piatnitsa.exception.DaoException;
-import com.piatnitsa.service.impl.TagService;
+import com.piatnitsa.service.TagService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/tags")
@@ -38,5 +39,10 @@ public class TagController {
     public ResponseEntity<Object> delete(@PathVariable long id) throws DaoException {
         tagService.removeById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/filter")
+    public List<Tag> tagByFilter(@RequestParam Map<String, String> params) throws DaoException {
+        return tagService.doFilter(params);
     }
 }

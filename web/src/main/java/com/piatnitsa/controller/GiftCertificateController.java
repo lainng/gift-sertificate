@@ -2,21 +2,22 @@ package com.piatnitsa.controller;
 
 import com.piatnitsa.entity.GiftCertificate;
 import com.piatnitsa.exception.DaoException;
-import com.piatnitsa.service.impl.GiftCertificateService;
+import com.piatnitsa.service.impl.GiftCertificateServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/certificates")
 public class GiftCertificateController {
-    private final GiftCertificateService certificateService;
+    private final GiftCertificateServiceImpl certificateService;
 
     @Autowired
-    public GiftCertificateController(GiftCertificateService certificateService) {
+    public GiftCertificateController(GiftCertificateServiceImpl certificateService) {
         this.certificateService = certificateService;
     }
 
@@ -47,5 +48,10 @@ public class GiftCertificateController {
                                                     @RequestBody GiftCertificate certificate) throws DaoException {
         certificateService.update(id, certificate);
         return ResponseEntity.status(HttpStatus.CREATED).body("Success");
+    }
+
+    @GetMapping("/filter")
+    public List<GiftCertificate> certificateByFilter(@RequestParam Map<String, String> params) throws DaoException {
+        return certificateService.doFilter(params);
     }
 }

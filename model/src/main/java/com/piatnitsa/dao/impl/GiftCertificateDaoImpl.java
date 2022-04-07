@@ -1,8 +1,6 @@
 package com.piatnitsa.dao.impl;
 
-import com.piatnitsa.dao.AbstractDao;
-import com.piatnitsa.dao.CRUDDao;
-import com.piatnitsa.dao.TagDao;
+import com.piatnitsa.dao.*;
 import com.piatnitsa.dao.extractor.GiftCertificateExtractor;
 import com.piatnitsa.dao.extractor.GiftCertificateFieldExtractor;
 import com.piatnitsa.entity.GiftCertificate;
@@ -23,9 +21,9 @@ import java.util.Map;
 import java.util.Set;
 
 @Component
-public class GiftCertificateDaoImpl extends AbstractDao<GiftCertificate> implements CRUDDao<GiftCertificate> {
+public class GiftCertificateDaoImpl extends AbstractDao<GiftCertificate> implements GiftCertificateDao {
     private static final String QUERY_SELECT_BY_ID = "select * from gift_certificate gc left join gift_certificate_with_tags gcwt on gc.id = gcwt.gift_certificate_id left join tag t on t.id = gcwt.tag_id where gc.id = ?;";
-    private static final String QUERY_SELECT_ALL_CERTIFICATES = "select * from gift_certificate gc left join gift_certificate_with_tags gcwt on gc.id = gcwt.gift_certificate_id left join tag t on t.id = gcwt.tag_id;";
+    private static final String QUERY_SELECT_ALL_CERTIFICATES = "select * from gift_certificate gc left join gift_certificate_with_tags gcwt on gc.id = gcwt.gift_certificate_id left join tag t on t.id = gcwt.tag_id ";
     private static final String QUERY_DELETE_BY_ID = "delete from gift_certificate where id = ?;";
     private static final String QUERY_INSERT_NEW_TAGS_TO_CERTIFICATE = "insert into gift_certificate_with_tags values (?, ?);";
     private static final String QUERY_DELETE_OLD_TAGS_FROM_CERTIFICATE = "delete from gift_certificate_with_tags where gift_certificate_id = ? and tag_id = ?;";
@@ -94,6 +92,13 @@ public class GiftCertificateDaoImpl extends AbstractDao<GiftCertificate> impleme
     public void update(GiftCertificate item) throws DaoException {
         executeUpdateQuery(buildUpdateQuery(item));
         updateCertificateTags(item);
+    }
+
+    @Override
+    public List<GiftCertificate> getWithFilter(Map<String, String> params) throws DaoException {
+        QueryBuilder queryBuilder = new QueryBuilder();
+        String query = queryBuilder.buildParametrizedQuery(QUERY_SELECT_ALL_CERTIFICATES, params);
+        return jdbcTemplate.query(query, resultSetExtractor);
     }
 
     private String buildUpdateQuery(GiftCertificate item) {

@@ -3,29 +3,23 @@ package com.piatnitsa.service.impl;
 import com.piatnitsa.dao.TagDao;
 import com.piatnitsa.entity.Tag;
 import com.piatnitsa.exception.DaoException;
+import com.piatnitsa.service.AbstractService;
 import com.piatnitsa.service.CRDService;
+import com.piatnitsa.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
-public class TagService implements CRDService<Tag> {
+public class TagServiceImpl extends AbstractService<Tag> implements TagService {
     private final TagDao tagDao;
 
     @Autowired
-    public TagService(TagDao tagDao) {
+    public TagServiceImpl(TagDao tagDao) {
+        super(tagDao);
         this.tagDao = tagDao;
-    }
-
-    @Override
-    public Tag getById(long id) throws DaoException {
-        return tagDao.getById(id);
-    }
-
-    @Override
-    public List<Tag> getAll() {
-        return tagDao.getAll();
     }
 
     @Override
@@ -34,7 +28,7 @@ public class TagService implements CRDService<Tag> {
     }
 
     @Override
-    public void removeById(long id) throws DaoException {
-        tagDao.removeById(id);
+    public List<Tag> doFilter(Map<String, String> params) throws DaoException {
+        return tagDao.getWithFilter(params);
     }
 }
