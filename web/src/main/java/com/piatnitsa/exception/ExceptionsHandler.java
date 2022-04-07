@@ -1,11 +1,10 @@
 package com.piatnitsa.exception;
 
 import com.piatnitsa.config.language.Translator;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-
-import static org.springframework.http.HttpStatus.NOT_FOUND;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class ExceptionsHandler {
@@ -13,9 +12,18 @@ public class ExceptionsHandler {
     @ExceptionHandler(DaoException.class)
     public final ResponseEntity<ErrorResponse> handleDaoExceptions(DaoException ex) {
         ErrorResponse errorResponse = new ErrorResponse();
-        String details = Translator.toLocale(ex.getMessage());
-        errorResponse.setErrorCode(ExceptionCodes.NOT_FOUND_EXCEPTION.toString());
+
+        String errorCode = ex.getMessage();
+        String details = Translator.toLocale(errorCode);
+
+        HttpStatus httpStatus = parseHttpStatus(errorCode);
+        errorResponse.setErrorCode(errorCode + " " + httpStatus.getReasonPhrase());
         errorResponse.setErrorMessage(details);
-        return new ResponseEntity<>(errorResponse, NOT_FOUND);
+        return new ResponseEntity<>(errorResponse, httpStatus);
+    }
+
+    private HttpStatus parseHttpStatus(String exCode) {
+        int httpStatusCode = Integer.parseInt(exCode.substring(0,3));
+        return HttpStatus.valueOf(httpStatusCode);
     }
 }
