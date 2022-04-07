@@ -8,12 +8,12 @@ import org.springframework.stereotype.Component;
 import java.util.Locale;
 
 @Component
-public class Translator {
+public class ExceptionMessageTranslator {
     private static ResourceBundleMessageSource messageSource;
 
     @Autowired
-    public Translator(ResourceBundleMessageSource messageSource) {
-        Translator.messageSource = messageSource;
+    public ExceptionMessageTranslator(ResourceBundleMessageSource messageSource) {
+        ExceptionMessageTranslator.messageSource = messageSource;
     }
 
     public static String toLocale(String messageKey) {

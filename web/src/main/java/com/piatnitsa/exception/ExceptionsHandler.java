@@ -1,6 +1,6 @@
 package com.piatnitsa.exception;
 
-import com.piatnitsa.config.language.Translator;
+import com.piatnitsa.config.language.ExceptionMessageTranslator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,7 +14,7 @@ public class ExceptionsHandler {
         ErrorResponse errorResponse = new ErrorResponse();
 
         String errorCode = ex.getMessage();
-        String details = Translator.toLocale(errorCode);
+        String details = ExceptionMessageTranslator.toLocale(errorCode);
 
         HttpStatus httpStatus = parseHttpStatus(errorCode);
         errorResponse.setErrorCode(errorCode + " " + httpStatus.getReasonPhrase());
