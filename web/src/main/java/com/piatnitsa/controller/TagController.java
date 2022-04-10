@@ -2,6 +2,7 @@ package com.piatnitsa.controller;
 
 import com.piatnitsa.entity.Tag;
 import com.piatnitsa.exception.DaoException;
+import com.piatnitsa.exception.IncorrectParameterException;
 import com.piatnitsa.service.TagService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,7 +43,7 @@ public class TagController {
     }
 
     @GetMapping("/filter")
-    public List<Tag> tagByFilter(@RequestParam Map<String, String> params) throws DaoException {
+    public List<Tag> tagByFilter(@RequestParam Map<String, String> params) throws DaoException, IncorrectParameterException {
         return tagService.doFilter(params);
     }
 }

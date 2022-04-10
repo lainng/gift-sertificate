@@ -9,8 +9,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class ExceptionsHandler {
 
-    @ExceptionHandler(DaoException.class)
-    public final ResponseEntity<ErrorResponse> handleDaoExceptions(DaoException ex) {
+    @ExceptionHandler({
+            DaoException.class,
+            IncorrectParameterException.class
+    })
+    public ResponseEntity<ErrorResponse> handleDaoExceptions(Exception ex) {
         ErrorResponse errorResponse = new ErrorResponse();
 
         String errorCode = ex.getMessage();
