@@ -11,6 +11,7 @@ public abstract class AbstractService<T> implements CRDService<T> {
     protected AbstractService(CRDDao<T> dao) {
         this.dao = dao;
     }
+
     @Override
     public T getById(long id) throws DaoException {
         return dao.getById(id);
