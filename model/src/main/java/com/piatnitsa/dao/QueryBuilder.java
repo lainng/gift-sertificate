@@ -28,7 +28,11 @@ public class QueryBuilder {
                     addSortParameter(query, "name", entry.getValue());
                     break;
                 }
-                default: throw new DaoException(DaoExceptionMessageCodes.INCORRECT_FILTER_PARAMETER);
+                case "tag_name_sort": {
+                    addSortParameter(query, "tag_name", entry.getValue());
+                    break;
+                }
+                default: throw new DaoException(DaoExceptionMessageCodes.NO_ENTITY_WITH_PARAMETERS);
             }
         }
         return query.toString();
