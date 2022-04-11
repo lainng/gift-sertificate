@@ -5,13 +5,14 @@ import com.piatnitsa.exception.DaoExceptionMessageCodes;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
+import java.util.Set;
 
 @Component
 public class QueryBuilder {
 
-    public String buildParametrizedQuery(String basicQuery, Map<String, String> params) throws DaoException {
+    public String buildQueryWithFilters(String basicQuery, Map<String, String> filterParams) throws DaoException {
         StringBuilder query = new StringBuilder(basicQuery);
-        for (Map.Entry<String, String> entry : params.entrySet()) {
+        for (Map.Entry<String, String> entry : filterParams.entrySet()) {
             String param = entry.getKey().toLowerCase();
             switch (param) {
                 case "name":
@@ -36,6 +37,22 @@ public class QueryBuilder {
             }
         }
         return query.toString();
+    }
+
+    public String buildUpdateQuery(String basicQuery, Map<String, String> updatableParams) {
+        StringBuilder updateQuery = new StringBuilder(basicQuery);
+
+        Set<Map.Entry<String, String>> entries = updatableParams.entrySet();
+        for (Map.Entry<String, String> entry : entries) {
+            updateQuery.append(entry.getKey())
+                    .append("=")
+                    .append('\'').append(entry.getValue()).append('\'')
+                    .append(", ");
+        }
+        updateQuery.deleteCharAt(updateQuery.length() - 2);
+        updateQuery.append(" where id=").append(updatableParams.get("id"));
+
+        return updateQuery.toString();
     }
 
     private void addPartParameter(StringBuilder query, String param, String value) {
