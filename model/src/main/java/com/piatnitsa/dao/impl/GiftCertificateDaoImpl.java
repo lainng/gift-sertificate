@@ -21,9 +21,11 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 public class GiftCertificateDaoImpl extends AbstractDao<GiftCertificate> implements GiftCertificateDao {
+    private static final String QUERY_SELECT_CERTIFICATE_ID = "select gc.id from gift_certificate gc left join gift_certificate_with_tags gcwt on gc.id = gcwt.gift_certificate_id left join tag t on t.id = gcwt.tag_id ";
     private static final String QUERY_SELECT_BY_ID = "select * from gift_certificate gc left join gift_certificate_with_tags gcwt on gc.id = gcwt.gift_certificate_id left join tag t on t.id = gcwt.tag_id where gc.id = ?;";
     private static final String QUERY_SELECT_ALL_CERTIFICATES = "select * from gift_certificate gc left join gift_certificate_with_tags gcwt on gc.id = gcwt.gift_certificate_id left join tag t on t.id = gcwt.tag_id ";
     private static final String QUERY_DELETE_BY_ID = "delete from gift_certificate where id = ?;";
@@ -106,9 +108,20 @@ public class GiftCertificateDaoImpl extends AbstractDao<GiftCertificate> impleme
 
     @Override
     public List<GiftCertificate> getWithFilter(Map<String, String> params) throws DaoException {
-        QueryBuilder queryBuilder = new QueryBuilder();
-        String query = queryBuilder.buildQueryWithFilters(QUERY_SELECT_ALL_CERTIFICATES, params);
-        return jdbcTemplate.query(query, resultSetExtractor);
+        String query = queryBuilder.buildQueryWithFilters(
+                QUERY_SELECT_CERTIFICATE_ID,
+                params);
+        List<Integer> ids = jdbcTemplate.queryForList(query, Integer.class);
+        ids = ids.stream().distinct().collect(Collectors.toList());
+        List<GiftCertificate> filteredCertificates = new ArrayList<>(ids.size());
+        for (Integer id : ids) {
+            GiftCertificate item = executeQueryAsSingleEntity(
+                    QUERY_SELECT_BY_ID,
+                    id
+            );
+            filteredCertificates.add(item);
+        }
+        return filteredCertificates;
     }
 
     private void updateCertificateTags(GiftCertificate item) throws DaoException {
