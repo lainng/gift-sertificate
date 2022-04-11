@@ -48,7 +48,7 @@ public class TagDaoImpl extends AbstractDao<Tag> implements TagDao {
     @Override
     public List<Tag> getWithFilter(Map<String, String> params) throws DaoException {
         QueryBuilder queryBuilder = new QueryBuilder();
-        String getQuery = queryBuilder.buildParametrizedQuery(QUERY_SELECT_ALL_TAGS, params);
+        String getQuery = queryBuilder.buildQueryWithFilters(QUERY_SELECT_ALL_TAGS, params);
         return jdbcTemplate.query(
                 getQuery,
                 resultSetExtractor
