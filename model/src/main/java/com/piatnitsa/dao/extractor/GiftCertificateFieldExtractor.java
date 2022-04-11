@@ -1,14 +1,20 @@
 package com.piatnitsa.dao.extractor;
 
 import com.piatnitsa.entity.GiftCertificate;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Component
 public class GiftCertificateFieldExtractor {
 
     public Map<String, String> extractData(GiftCertificate certificate) {
         Map<String, String> fields = new HashMap<>();
+
+        if (certificate.getId() != 0) {
+            fields.put("id", String.valueOf(certificate.getId()));
+        }
 
         if (certificate.getName() != null && !certificate.getName().isEmpty()) {
             fields.put("name", certificate.getName());
