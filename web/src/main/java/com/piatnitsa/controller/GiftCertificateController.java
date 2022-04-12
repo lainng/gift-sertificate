@@ -2,6 +2,7 @@ package com.piatnitsa.controller;
 
 import com.piatnitsa.entity.GiftCertificate;
 import com.piatnitsa.exception.DaoException;
+import com.piatnitsa.exception.IncorrectParameterException;
 import com.piatnitsa.service.impl.GiftCertificateServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -51,7 +52,7 @@ public class GiftCertificateController {
     }
 
     @GetMapping("/filter")
-    public List<GiftCertificate> certificateByFilter(@RequestParam Map<String, String> params) throws DaoException {
+    public List<GiftCertificate> certificateByFilter(@RequestParam Map<String, String> params) throws DaoException, IncorrectParameterException {
         return certificateService.doFilter(params);
     }
 }
