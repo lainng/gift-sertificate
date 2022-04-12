@@ -5,12 +5,17 @@ import com.piatnitsa.dao.impl.GiftCertificateDaoImpl;
 import com.piatnitsa.entity.GiftCertificate;
 import com.piatnitsa.entity.Tag;
 import com.piatnitsa.exception.DaoException;
+import com.piatnitsa.exception.IncorrectParameterException;
+import com.piatnitsa.exception.IncorrectParameterMessageCodes;
 import com.piatnitsa.service.CRUDService;
+import com.piatnitsa.service.FilterParameter;
 import com.piatnitsa.service.GiftCertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -59,8 +64,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    public List<GiftCertificate> doFilter(Map<String, String> params) throws DaoException {
-        return certificateDao.getWithFilter(params);
+    public List<GiftCertificate> doFilter(Map<String, String> params) throws DaoException, IncorrectParameterException {
+        return certificateDao.getWithFilter(orderParameters(params));
     }
 
     private void saveNewTags(GiftCertificate item) throws DaoException {
@@ -79,5 +84,34 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
                 tagDao.insert(requestTag);
             }
         }
+    }
+
+    private Map<String, String> orderParameters(Map<String, String> requestParams) throws IncorrectParameterException {
+        Map<String, String> filterParams = new LinkedHashMap<>(requestParams.size());
+        Map<String, String> sortingParams = new LinkedHashMap<>(requestParams.size());
+
+        Map<String, String> requestParamsCopy = new HashMap<>(requestParams);
+
+        requestParams.forEach((key, value) -> {
+            switch (key) {
+                case FilterParameter.NAME:
+                case FilterParameter.DESCRIPTION: {
+                    filterParams.put(key, value);
+                    requestParamsCopy.remove(key);
+                    break;
+                }
+                case FilterParameter.DATE_SORT:
+                case FilterParameter.NAME_SORT: {
+                    sortingParams.put(key, value);
+                    requestParamsCopy.remove(key);
+                    break;
+                }
+            }
+        });
+        if (!requestParamsCopy.isEmpty()) {
+            throw new IncorrectParameterException(IncorrectParameterMessageCodes.BAD_GIFT_CERTIFICATE_FILTER_PARAMETER);
+        }
+        filterParams.putAll(sortingParams);
+        return filterParams;
     }
 }
