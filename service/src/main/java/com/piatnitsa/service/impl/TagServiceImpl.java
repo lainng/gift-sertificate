@@ -8,6 +8,7 @@ import com.piatnitsa.exception.IncorrectParameterMessageCodes;
 import com.piatnitsa.service.AbstractService;
 import com.piatnitsa.service.FilterParameter;
 import com.piatnitsa.service.TagService;
+import com.piatnitsa.validator.FilterParameterValidator;
 import com.piatnitsa.validator.TagValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,7 +47,10 @@ public class TagServiceImpl extends AbstractService<Tag> implements TagService {
             requestParamsCopy.remove(FilterParameter.TAG_NAME);
         }
         if (requestParamsCopy.containsKey(FilterParameter.SORT_BY_TAG_NAME)) {
-            orderedParams.put(FilterParameter.SORT_BY_TAG_NAME, requestParamsCopy.get(FilterParameter.SORT_BY_TAG_NAME));
+            String sortType = requestParamsCopy.get(FilterParameter.SORT_BY_TAG_NAME);
+            FilterParameterValidator.validateSortType(sortType);
+
+            orderedParams.put(FilterParameter.SORT_BY_TAG_NAME, sortType);
             requestParamsCopy.remove(FilterParameter.SORT_BY_TAG_NAME);
         }
 
