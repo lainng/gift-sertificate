@@ -3,6 +3,7 @@ package com.piatnitsa.controller;
 import com.piatnitsa.entity.GiftCertificate;
 import com.piatnitsa.exception.DaoException;
 import com.piatnitsa.exception.IncorrectParameterException;
+import com.piatnitsa.service.GiftCertificateService;
 import com.piatnitsa.service.impl.GiftCertificateServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,10 +16,10 @@ import java.util.Map;
 @RestController
 @RequestMapping("/certificates")
 public class GiftCertificateController {
-    private final GiftCertificateServiceImpl certificateService;
+    private final GiftCertificateService certificateService;
 
     @Autowired
-    public GiftCertificateController(GiftCertificateServiceImpl certificateService) {
+    public GiftCertificateController(GiftCertificateService certificateService) {
         this.certificateService = certificateService;
     }
 
