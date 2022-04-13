@@ -8,6 +8,7 @@ import com.piatnitsa.exception.IncorrectParameterMessageCodes;
 import com.piatnitsa.service.AbstractService;
 import com.piatnitsa.service.FilterParameter;
 import com.piatnitsa.service.TagService;
+import com.piatnitsa.validator.TagValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +27,8 @@ public class TagServiceImpl extends AbstractService<Tag> implements TagService {
     }
 
     @Override
-    public void insert(Tag item) throws DaoException {
+    public void insert(Tag item) throws DaoException, IncorrectParameterException {
+        TagValidator.validate(item);
         tagDao.insert(item);
     }
 
