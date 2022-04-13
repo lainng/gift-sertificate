@@ -71,6 +71,10 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     private void saveNewTags(GiftCertificate item) throws DaoException {
         List<Tag> allTags = tagDao.getAll();
         List<Tag> requestTags = item.getTags();
+        if (requestTags == null || requestTags.size() == 0) {
+            return;
+        }
+
         for (Tag requestTag : requestTags) {
             boolean isExist = false;
             for (Tag tag : allTags) {

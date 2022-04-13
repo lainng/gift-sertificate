@@ -125,6 +125,11 @@ public class GiftCertificateDaoImpl extends AbstractDao<GiftCertificate> impleme
     }
 
     private void updateCertificateTags(GiftCertificate item) throws DaoException {
+        List<Tag> requestTags = item.getTags();
+        if (requestTags == null || requestTags.size() == 0) {
+            return;
+        }
+
         List<Tag> newTags = createTagsWithId(item.getTags());
         executeUpdateQuery(
                 QUERY_DELETE_ASSOCIATED_TAGS,
