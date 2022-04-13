@@ -24,7 +24,7 @@ public class GiftCertificateController {
     }
 
     @GetMapping("/{id}")
-    public GiftCertificate certificateById(@PathVariable long id) throws DaoException {
+    public GiftCertificate certificateById(@PathVariable long id) throws DaoException, IncorrectParameterException {
        return certificateService.getById(id);
     }
 
@@ -34,13 +34,13 @@ public class GiftCertificateController {
     }
 
     @PostMapping
-    public ResponseEntity<String> createCertificate(@RequestBody GiftCertificate certificate) throws DaoException {
+    public ResponseEntity<String> createCertificate(@RequestBody GiftCertificate certificate) throws DaoException, IncorrectParameterException {
         certificateService.insert(certificate);
         return ResponseEntity.status(HttpStatus.CREATED).body("Success");
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteCertificateById(@PathVariable long id) throws DaoException {
+    public ResponseEntity<Object> deleteCertificateById(@PathVariable long id) throws DaoException, IncorrectParameterException {
         certificateService.removeById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

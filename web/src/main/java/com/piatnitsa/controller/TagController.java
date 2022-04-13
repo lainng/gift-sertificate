@@ -26,18 +26,18 @@ public class TagController {
     }
 
     @GetMapping("/{id}")
-    public Tag tagById(@PathVariable long id) throws DaoException {
+    public Tag tagById(@PathVariable long id) throws DaoException, IncorrectParameterException {
         return tagService.getById(id);
     }
 
     @PostMapping
-    public ResponseEntity<String> insert(@RequestBody Tag tag) throws DaoException {
+    public ResponseEntity<String> insert(@RequestBody Tag tag) throws DaoException, IncorrectParameterException {
         tagService.insert(tag);
         return ResponseEntity.status(HttpStatus.CREATED).body("Success");
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> delete(@PathVariable long id) throws DaoException {
+    public ResponseEntity<Object> delete(@PathVariable long id) throws DaoException, IncorrectParameterException {
         tagService.removeById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
