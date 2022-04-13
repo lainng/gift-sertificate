@@ -49,10 +49,11 @@ public class TagDaoImpl extends AbstractDao<Tag> implements TagDao {
     public List<Tag> getWithFilter(Map<String, String> params) throws DaoException {
         QueryBuilder queryBuilder = new QueryBuilder();
         String getQuery = queryBuilder.buildQueryWithFilters(QUERY_SELECT_ALL_TAGS, params);
-        return jdbcTemplate.query(
-                getQuery,
-                resultSetExtractor
-        );
+        List<Tag> filteredTags = executeQuery(getQuery);
+        if (filteredTags.size() == 0) {
+            throw new DaoException(DaoExceptionMessageCodes.NO_ENTITY_WITH_PARAMETERS);
+        }
+        return filteredTags;
     }
 
     @Override
