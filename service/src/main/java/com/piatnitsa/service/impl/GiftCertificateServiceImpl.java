@@ -11,6 +11,7 @@ import com.piatnitsa.exception.IncorrectParameterMessageCodes;
 import com.piatnitsa.service.AbstractService;
 import com.piatnitsa.service.FilterParameter;
 import com.piatnitsa.service.GiftCertificateService;
+import com.piatnitsa.service.TimestampHandler;
 import com.piatnitsa.validator.FilterParameterValidator;
 import com.piatnitsa.validator.GiftCertificateValidator;
 import com.piatnitsa.validator.IdentifiableValidator;
@@ -37,9 +38,9 @@ public class GiftCertificateServiceImpl extends AbstractService<GiftCertificate>
 
     @Override
     public void insert(GiftCertificate item) throws DaoException, IncorrectParameterException {
-        LocalDateTime dateTime = LocalDateTime.now();
-        item.setCreateDate(dateTime.toString());
-        item.setLastUpdateDate(dateTime.toString());
+        String currentTimestamp = TimestampHandler.getCurrentTimestamp();
+        item.setCreateDate(currentTimestamp);
+        item.setLastUpdateDate(currentTimestamp);
         GiftCertificateValidator.validate(item);
         saveNewTags(item);
         certificateDao.insert(item);
@@ -47,8 +48,8 @@ public class GiftCertificateServiceImpl extends AbstractService<GiftCertificate>
 
     @Override
     public void update(long id, GiftCertificate item) throws DaoException, IncorrectParameterException {
-        LocalDateTime dateTime = LocalDateTime.now();
-        item.setLastUpdateDate(dateTime.toString());
+        String currentTimestamp = TimestampHandler.getCurrentTimestamp();
+        item.setLastUpdateDate(currentTimestamp);
 
         IdentifiableValidator.validateId(id);
         GiftCertificateValidator.validateForUpdate(item);
