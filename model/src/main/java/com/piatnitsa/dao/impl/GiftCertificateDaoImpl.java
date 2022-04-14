@@ -107,7 +107,7 @@ public class GiftCertificateDaoImpl extends AbstractDao<GiftCertificate> impleme
     public void update(GiftCertificate item) throws DaoException {
         Map<String, String> params = fieldExtractor.extractData(item);
         executeUpdateQuery(queryBuilder.buildUpdateQuery(QUERY_UPDATE_CERTIFICATE, params));
-        if (item.getTags() != null || item.getTags().size() != 0) {
+        if (item.getTags() != null) {
             updateCertificateTags(item);
         }
     }
