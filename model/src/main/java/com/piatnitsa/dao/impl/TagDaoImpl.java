@@ -17,7 +17,7 @@ import java.util.Map;
 @Component
 public class TagDaoImpl extends AbstractDao<Tag> implements TagDao {
     private static final String QUERY_SELECT_BY_ID = "select * from tag where id = ?;";
-    private static final String QUERY_SELECT_BY_NAME = "select * from tag where tag_name = ?;";
+    private static final String QUERY_SELECT_BY_NAME = "select * from tag where tag_name ilike ?;";
     private static final String QUERY_SELECT_ALL_TAGS = "select * from tag ";
     private static final String QUERY_INSERT_TAG = "insert into tag(tag_name) values (?);";
     private static final String QUERY_DELETE_BY_ID = "delete from tag where id = ?;";
