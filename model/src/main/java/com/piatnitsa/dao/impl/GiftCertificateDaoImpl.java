@@ -81,14 +81,18 @@ public class GiftCertificateDaoImpl extends AbstractDao<GiftCertificate> impleme
                 },
                 keyHolder
         );
+
         Integer newId;
         if (keyHolder.getKeys().size() > 1) {
             newId = (Integer) keyHolder.getKeys().get("id");
         } else {
             newId = keyHolder.getKey().intValue();
         }
+
         item.setId(newId);
-        addNewTagsToCertificate(item);
+        if (item.getTags() != null) {
+            addNewTagsToCertificate(item);
+        }
     }
 
     @Override
@@ -103,7 +107,9 @@ public class GiftCertificateDaoImpl extends AbstractDao<GiftCertificate> impleme
     public void update(GiftCertificate item) throws DaoException {
         Map<String, String> params = fieldExtractor.extractData(item);
         executeUpdateQuery(queryBuilder.buildUpdateQuery(QUERY_UPDATE_CERTIFICATE, params));
-        updateCertificateTags(item);
+        if (item.getTags() != null || item.getTags().size() != 0) {
+            updateCertificateTags(item);
+        }
     }
 
     @Override
@@ -125,11 +131,6 @@ public class GiftCertificateDaoImpl extends AbstractDao<GiftCertificate> impleme
     }
 
     private void updateCertificateTags(GiftCertificate item) throws DaoException {
-        List<Tag> requestTags = item.getTags();
-        if (requestTags == null || requestTags.size() == 0) {
-            return;
-        }
-
         List<Tag> newTags = createTagsWithId(item.getTags());
         executeUpdateQuery(
                 QUERY_DELETE_ASSOCIATED_TAGS,
