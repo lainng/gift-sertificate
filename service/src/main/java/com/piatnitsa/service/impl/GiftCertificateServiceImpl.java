@@ -1,5 +1,6 @@
 package com.piatnitsa.service.impl;
 
+import com.piatnitsa.dao.GiftCertificateDao;
 import com.piatnitsa.dao.TagDao;
 import com.piatnitsa.dao.impl.GiftCertificateDaoImpl;
 import com.piatnitsa.entity.GiftCertificate;
@@ -7,9 +8,12 @@ import com.piatnitsa.entity.Tag;
 import com.piatnitsa.exception.DaoException;
 import com.piatnitsa.exception.IncorrectParameterException;
 import com.piatnitsa.exception.IncorrectParameterMessageCodes;
-import com.piatnitsa.service.CRUDService;
+import com.piatnitsa.service.AbstractService;
 import com.piatnitsa.service.FilterParameter;
 import com.piatnitsa.service.GiftCertificateService;
+import com.piatnitsa.validator.FilterParameterValidator;
+import com.piatnitsa.validator.GiftCertificateValidator;
+import com.piatnitsa.validator.IdentifiableValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,46 +24,38 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class GiftCertificateServiceImpl implements GiftCertificateService {
-    private final GiftCertificateDaoImpl certificateDao;
+public class GiftCertificateServiceImpl extends AbstractService<GiftCertificate> implements GiftCertificateService {
+    private final GiftCertificateDao certificateDao;
     private final TagDao tagDao;
 
     @Autowired
     public GiftCertificateServiceImpl(GiftCertificateDaoImpl certificateDao, TagDao tagDao) {
+        super(certificateDao);
         this.certificateDao = certificateDao;
         this.tagDao = tagDao;
     }
 
     @Override
-    public GiftCertificate getById(long id) throws DaoException {
-        return certificateDao.getById(id);
-    }
-
-    @Override
-    public List<GiftCertificate> getAll() {
-        return certificateDao.getAll();
-    }
-
-    @Override
-    public void insert(GiftCertificate item) throws DaoException {
+    public void insert(GiftCertificate item) throws DaoException, IncorrectParameterException {
         LocalDateTime dateTime = LocalDateTime.now();
         item.setCreateDate(dateTime.toString());
         item.setLastUpdateDate(dateTime.toString());
+        GiftCertificateValidator.validate(item);
         saveNewTags(item);
         certificateDao.insert(item);
     }
 
     @Override
-    public void removeById(long id) throws DaoException {
-        certificateDao.removeById(id);
-    }
-
-    @Override
-    public void update(long id, GiftCertificate item) throws DaoException {
+    public void update(long id, GiftCertificate item) throws DaoException, IncorrectParameterException {
         LocalDateTime dateTime = LocalDateTime.now();
         item.setLastUpdateDate(dateTime.toString());
+
+        IdentifiableValidator.validateId(id);
+        GiftCertificateValidator.validateForUpdate(item);
+
         item.setId(id);
         saveNewTags(item);
+
         certificateDao.update(item);
     }
 
@@ -93,10 +89,11 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     private Map<String, String> orderParameters(Map<String, String> requestParams) throws IncorrectParameterException {
         Map<String, String> filterParams = new LinkedHashMap<>(requestParams.size());
         Map<String, String> sortingParams = new LinkedHashMap<>(requestParams.size());
-
         Map<String, String> requestParamsCopy = new HashMap<>(requestParams);
 
-        requestParams.forEach((key, value) -> {
+        for (Map.Entry<String, String> entry : requestParams.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
             switch (key) {
                 case FilterParameter.NAME:
                 case FilterParameter.DESCRIPTION: {
@@ -106,12 +103,14 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
                 }
                 case FilterParameter.DATE_SORT:
                 case FilterParameter.NAME_SORT: {
+                    FilterParameterValidator.validateSortType(value);
                     sortingParams.put(key, value);
                     requestParamsCopy.remove(key);
                     break;
                 }
             }
-        });
+        }
+
         if (!requestParamsCopy.isEmpty()) {
             throw new IncorrectParameterException(IncorrectParameterMessageCodes.BAD_GIFT_CERTIFICATE_FILTER_PARAMETER);
         }
