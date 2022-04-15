@@ -118,15 +118,18 @@ public class GiftCertificateDaoImpl extends AbstractDao<GiftCertificate> impleme
                 QUERY_SELECT_CERTIFICATE_ID,
                 params);
         List<Integer> ids = jdbcTemplate.queryForList(query, Integer.class);
+        if (ids.isEmpty()) {
+            throw new DaoException(DaoExceptionMessageCodes.NO_ENTITIES_WITH_PARAMETERS);
+        }
         ids = ids.stream().distinct().collect(Collectors.toList());
         List<GiftCertificate> filteredCertificates = new ArrayList<>(ids.size());
-        for (Integer id : ids) {
+        ids.forEach((id) -> {
             GiftCertificate item = executeQueryAsSingleEntity(
                     QUERY_SELECT_BY_ID,
                     id
             );
             filteredCertificates.add(item);
-        }
+        });
         return filteredCertificates;
     }
 
