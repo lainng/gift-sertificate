@@ -81,15 +81,7 @@ public class GiftCertificateDaoImpl extends AbstractDao<GiftCertificate> impleme
                 },
                 keyHolder
         );
-
-        Integer newId;
-        if (keyHolder.getKeys().size() > 1) {
-            newId = (Integer) keyHolder.getKeys().get("id");
-        } else {
-            newId = keyHolder.getKey().intValue();
-        }
-
-        item.setId(newId);
+        item.setId(getNewCertificateId(keyHolder));
         if (item.getTags() != null) {
             addNewTagsToCertificate(item);
         }
@@ -166,5 +158,13 @@ public class GiftCertificateDaoImpl extends AbstractDao<GiftCertificate> impleme
             newTagsWithId.add(tagWithId);
         }
         return newTagsWithId;
+    }
+
+    private long getNewCertificateId(KeyHolder keyHolder) throws DaoException {
+        Map<String, Object> keys = keyHolder.getKeys();
+        if (keys == null) {
+            throw new DaoException(DaoExceptionMessageCodes.SAVING_ERROR);
+        }
+        return (long) keys.get("id");
     }
 }
