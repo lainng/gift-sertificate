@@ -97,7 +97,8 @@ public class GiftCertificateServiceImpl extends AbstractService<GiftCertificate>
             String value = entry.getValue();
             switch (key) {
                 case FilterParameter.NAME:
-                case FilterParameter.DESCRIPTION: {
+                case FilterParameter.DESCRIPTION:
+                case FilterParameter.TAG_NAME: {
                     filterParams.put(key, value);
                     requestParamsCopy.remove(key);
                     break;
