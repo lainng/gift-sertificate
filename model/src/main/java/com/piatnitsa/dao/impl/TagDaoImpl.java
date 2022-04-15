@@ -50,8 +50,8 @@ public class TagDaoImpl extends AbstractDao<Tag> implements TagDao {
         QueryBuilder queryBuilder = new QueryBuilder();
         String getQuery = queryBuilder.buildQueryWithFilters(QUERY_SELECT_ALL_TAGS, params);
         List<Tag> filteredTags = executeQuery(getQuery);
-        if (filteredTags.size() == 0) {
-            throw new DaoException(DaoExceptionMessageCodes.NO_ENTITY_WITH_PARAMETERS);
+        if (filteredTags.isEmpty()) {
+            throw new DaoException(DaoExceptionMessageCodes.NO_ENTITIES_WITH_PARAMETERS);
         }
         return filteredTags;
     }

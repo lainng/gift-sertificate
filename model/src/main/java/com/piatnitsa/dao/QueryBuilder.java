@@ -33,7 +33,7 @@ public class QueryBuilder {
                     addSortParameter(query, "tag_name", entry.getValue());
                     break;
                 }
-                default: throw new DaoException(DaoExceptionMessageCodes.NO_ENTITY_WITH_PARAMETERS);
+                default: throw new DaoException(DaoExceptionMessageCodes.NO_ENTITIES_WITH_PARAMETERS);
             }
         }
         return query.toString();
