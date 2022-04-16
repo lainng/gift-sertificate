@@ -15,6 +15,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
@@ -64,6 +65,7 @@ public class GiftCertificateDaoImpl extends AbstractDao<GiftCertificate> impleme
     }
 
     @Override
+    @Transactional
     public void insert(GiftCertificate item) throws DaoException {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(
@@ -96,6 +98,7 @@ public class GiftCertificateDaoImpl extends AbstractDao<GiftCertificate> impleme
     }
 
     @Override
+    @Transactional
     public void update(GiftCertificate item) throws DaoException {
         Map<String, String> params = fieldExtractor.extractData(item);
         executeUpdateQuery(queryBuilder.buildUpdateQuery(QUERY_UPDATE_CERTIFICATE, params));
