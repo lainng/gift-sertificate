@@ -30,7 +30,7 @@ public class GiftCertificateServiceImpl extends AbstractService<GiftCertificate>
     private final TagDao tagDao;
 
     @Autowired
-    public GiftCertificateServiceImpl(GiftCertificateDaoImpl certificateDao, TagDao tagDao) {
+    public GiftCertificateServiceImpl(GiftCertificateDao certificateDao, TagDao tagDao) {
         super(certificateDao);
         this.certificateDao = certificateDao;
         this.tagDao = tagDao;
