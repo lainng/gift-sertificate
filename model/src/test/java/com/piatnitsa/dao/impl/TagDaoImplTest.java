@@ -1,6 +1,7 @@
-package com.piatnitsa.dao;
+package com.piatnitsa.dao.impl;
 
 import com.piatnitsa.config.H2DatabaseConfig;
+import com.piatnitsa.dao.TagDao;
 import com.piatnitsa.entity.Tag;
 import com.piatnitsa.exception.DaoException;
 import org.junit.jupiter.api.Assertions;
