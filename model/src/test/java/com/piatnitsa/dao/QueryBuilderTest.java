@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import static com.piatnitsa.dao.SortingParameter.*;
+
 public class QueryBuilderTest {
     private final QueryBuilder queryBuilder = new QueryBuilder();
     private static final String FILTER_TAG_QUERY = "select * from tag ";
@@ -20,9 +22,6 @@ public class QueryBuilderTest {
     private static final String UPDATABLE_ID = "1";
     private static final String ASCENDING = "asc";
     private static final String DESCENDING = "DESC";
-    private static final String DATE_SORT_PARAMETER = "date_sort";
-    private static final String NAME_SORT_PARAMETER = "name_sort";
-    private static final String TAG_NAME_SORT_PARAMETER = "tag_name_sort";
     private static final String INCORRECT_FILTER_PARAMETER = "incorrect parameter";
 
     @Test
