@@ -4,6 +4,7 @@ import com.piatnitsa.entity.GiftCertificateColumn;
 import com.piatnitsa.entity.TagColumn;
 import com.piatnitsa.exception.DaoException;
 import com.piatnitsa.exception.DaoExceptionMessageCodes;
+import org.springframework.core.io.support.PropertySourceFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -11,6 +12,9 @@ import java.util.Set;
 
 @Component
 public class QueryBuilder {
+    private static final String DATE_SORT_PARAMETER = "date_sort";
+    private static final String NAME_SORT_PARAMETER = "name_sort";
+    private static final String TAG_NAME_SORT_PARAMETER = "tag_name_sort";
 
     public String buildQueryWithFilters(String basicQuery, Map<String, String> filterParams) throws DaoException {
         StringBuilder query = new StringBuilder(basicQuery);
@@ -23,16 +27,16 @@ public class QueryBuilder {
                     addPartParameter(query, param, entry.getValue());
                     break;
                 }
-                case "date_sort": {
-                    addSortParameter(query, "create_date", entry.getValue());
+                case DATE_SORT_PARAMETER: {
+                    addSortParameter(query, GiftCertificateColumn.CREATE_DATE, entry.getValue());
                     break;
                 }
-                case "name_sort": {
-                    addSortParameter(query, "name", entry.getValue());
+                case NAME_SORT_PARAMETER: {
+                    addSortParameter(query, GiftCertificateColumn.NAME, entry.getValue());
                     break;
                 }
-                case "tag_name_sort": {
-                    addSortParameter(query, "tag_name", entry.getValue());
+                case TAG_NAME_SORT_PARAMETER: {
+                    addSortParameter(query, TagColumn.TAG_NAME, entry.getValue());
                     break;
                 }
                 default: throw new DaoException(DaoExceptionMessageCodes.NO_ENTITIES_WITH_PARAMETERS);
