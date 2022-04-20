@@ -1,8 +1,10 @@
 package com.piatnitsa.dao.impl;
 
 import com.piatnitsa.config.H2DatabaseConfig;
+import com.piatnitsa.dao.SortingParameter;
 import com.piatnitsa.dao.TagDao;
 import com.piatnitsa.entity.Tag;
+import com.piatnitsa.entity.TagColumn;
 import com.piatnitsa.exception.DaoException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -10,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Arrays;
@@ -47,14 +50,22 @@ public class TagDaoImplTest {
     }
 
     @Test
-    void getAllTest() {
+    void getAllTest_ExistedRows() throws DaoException {
         List<Tag> expectedTags = Arrays.asList(TAG_1, TAG_2, TAG_3, TAG_4, TAG_5);
         List<Tag> actualTags = tagDao.getAll();
         Assertions.assertEquals(expectedTags, actualTags);
     }
 
     @Test
-    void getByNameTest() throws DaoException {
+    @Sql({"classpath:deleteAllRowsFromTag.sql"})
+    @Sql(scripts = {"classpath:fillingTagTable.sql"},
+            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    void getAllTest_NoRowsInTable() {
+        Assertions.assertThrows(DaoException.class, () -> tagDao.getAll());
+    }
+
+    @Test
+    void getByNameTest_CorrectName() throws DaoException {
         Tag actual = tagDao.getByName(TAG_2.getName());
         Assertions.assertEquals(TAG_2, actual);
     }
@@ -67,8 +78,8 @@ public class TagDaoImplTest {
     @Test
     void getWithFiltersTest_CorrectParams() throws DaoException {
         Map<String, String> filterParams = new LinkedHashMap<>();
-        filterParams.put("tag_name", PART_OF_TAG_NAME);
-        filterParams.put("tag_name_sort", ASCENDING);
+        filterParams.put(TagColumn.TAG_NAME, PART_OF_TAG_NAME);
+        filterParams.put(SortingParameter.TAG_NAME_SORT_PARAMETER, ASCENDING);
         List<Tag> actual = tagDao.getWithFilter(filterParams);
         List<Tag> expected = Arrays.asList(TAG_1, TAG_3, TAG_2, TAG_5, TAG_4);
         Assertions.assertEquals(expected, actual);
@@ -77,7 +88,7 @@ public class TagDaoImplTest {
     @Test
     void getWithFiltersTest_IncorrectParam() {
         Map<String, String> filterParams = new LinkedHashMap<>();
-        filterParams.put("tag_name", PART_OF_TAG_NAME);
+        filterParams.put(TagColumn.TAG_NAME, PART_OF_TAG_NAME);
         filterParams.put("incorrect_param", INCORRECT_PARAMETER_VALUE);
         Assertions.assertThrows(DaoException.class, () -> tagDao.getWithFilter(filterParams));
     }
