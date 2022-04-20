@@ -1,5 +1,7 @@
 package com.piatnitsa.dao;
 
+import com.piatnitsa.entity.GiftCertificateColumn;
+import com.piatnitsa.entity.TagColumn;
 import com.piatnitsa.exception.DaoException;
 import com.piatnitsa.exception.DaoExceptionMessageCodes;
 import org.springframework.stereotype.Component;
@@ -15,9 +17,9 @@ public class QueryBuilder {
         for (Map.Entry<String, String> entry : filterParams.entrySet()) {
             String param = entry.getKey().toLowerCase();
             switch (param) {
-                case "name":
-                case "description":
-                case "tag_name": {
+                case GiftCertificateColumn.NAME:
+                case GiftCertificateColumn.DESCRIPTION:
+                case TagColumn.TAG_NAME: {
                     addPartParameter(query, param, entry.getValue());
                     break;
                 }
