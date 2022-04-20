@@ -48,6 +48,9 @@ public class QueryBuilder {
     public String buildUpdateQuery(String basicQuery, Map<String, String> updatableParams) {
         StringBuilder updateQuery = new StringBuilder(basicQuery);
 
+        String id = updatableParams.get(GiftCertificateColumn.ID);
+        updatableParams.remove(GiftCertificateColumn.ID);
+
         Set<Map.Entry<String, String>> entries = updatableParams.entrySet();
         for (Map.Entry<String, String> entry : entries) {
             updateQuery.append(entry.getKey())
@@ -56,7 +59,7 @@ public class QueryBuilder {
                     .append(", ");
         }
         updateQuery.deleteCharAt(updateQuery.length() - 2);
-        updateQuery.append(" where id=").append(updatableParams.get("id"));
+        updateQuery.append("where id=").append(id);
 
         return updateQuery.toString();
     }
