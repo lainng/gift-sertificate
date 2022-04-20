@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.piatnitsa.entity.GiftCertificateColumnName.*;
+import static com.piatnitsa.entity.GiftCertificateColumn.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GiftCertificateFieldExtractorTest {
