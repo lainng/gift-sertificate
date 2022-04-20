@@ -1,6 +1,6 @@
 package com.piatnitsa.entity;
 
-public class GiftCertificateColumnName {
+public class GiftCertificateColumn {
     public static final String ID = "id";
     public static final String NAME = "name";
     public static final String DESCRIPTION = "description";
