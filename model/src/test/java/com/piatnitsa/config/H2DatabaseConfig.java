@@ -2,7 +2,6 @@ package com.piatnitsa.config;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import org.h2.jdbcx.JdbcDataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 import org.springframework.core.io.ClassPathResource;
@@ -24,8 +23,8 @@ public class H2DatabaseConfig {
     public DataSource dataSource(HikariConfig config) {
         HikariDataSource dataSource = new HikariDataSource(config);
 
-        Resource initData = new ClassPathResource("creatingTables.sql");
-        Resource fillData = new ClassPathResource("fillingTables.sql");
+        Resource initData = new ClassPathResource("creatingTestTables.sql");
+        Resource fillData = new ClassPathResource("fillingTestTables.sql");
         DatabasePopulator databasePopulator = new ResourceDatabasePopulator(initData, fillData);
         DatabasePopulatorUtils.execute(databasePopulator, dataSource);
         return dataSource;
