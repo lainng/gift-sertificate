@@ -58,8 +58,12 @@ public class TagDaoImpl extends AbstractDao<Tag> implements TagDao {
     }
 
     @Override
-    public List<Tag> getAll() {
-        return executeQuery(QUERY_SELECT_ALL_TAGS);
+    public List<Tag> getAll() throws DaoException {
+        List<Tag> items = executeQuery(QUERY_SELECT_ALL_TAGS);
+        if (items.isEmpty()) {
+            throw new DaoException(DaoExceptionMessageCodes.NO_ENTITIES);
+        }
+        return items;
     }
 
     @Override

@@ -21,7 +21,7 @@ public abstract class AbstractService<T> implements CRDService<T> {
     }
 
     @Override
-    public List<T> getAll() {
+    public List<T> getAll() throws DaoException {
         return dao.getAll();
     }
 

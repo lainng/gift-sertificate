@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface CRDDao<T> {
     T getById(long id) throws DaoException;
-    List<T> getAll();
+    List<T> getAll() throws DaoException;
     void insert(T item) throws DaoException;
     void removeById(long id) throws DaoException;
 }

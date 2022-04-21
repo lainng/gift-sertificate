@@ -28,7 +28,7 @@ public class GiftCertificateController {
     }
 
     @GetMapping
-    public List<GiftCertificate> allCertificates() {
+    public List<GiftCertificate> allCertificates() throws DaoException {
         return certificateService.getAll();
     }
 

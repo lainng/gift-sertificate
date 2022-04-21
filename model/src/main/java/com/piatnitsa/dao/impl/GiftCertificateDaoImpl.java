@@ -60,8 +60,12 @@ public class GiftCertificateDaoImpl extends AbstractDao<GiftCertificate> impleme
     }
 
     @Override
-    public List<GiftCertificate> getAll() {
-        return executeQuery(QUERY_SELECT_ALL_CERTIFICATES);
+    public List<GiftCertificate> getAll() throws DaoException {
+        List<GiftCertificate> items = executeQuery(QUERY_SELECT_ALL_CERTIFICATES);
+        if (items.isEmpty()) {
+            throw new DaoException(DaoExceptionMessageCodes.NO_ENTITIES);
+        }
+        return items;
     }
 
     @Override
