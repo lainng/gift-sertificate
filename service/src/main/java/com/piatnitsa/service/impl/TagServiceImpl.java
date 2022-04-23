@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,7 +40,7 @@ public class TagServiceImpl extends AbstractService<Tag> implements TagService {
     }
 
     private Map<String, String> orderParameters(Map<String, String> requestParams) throws IncorrectParameterException {
-        Map<String, String> orderedParams = new HashMap<>(requestParams.size());
+        Map<String, String> orderedParams = new LinkedHashMap<>(requestParams.size());
         Map<String, String> requestParamsCopy = new HashMap<>(requestParams);
 
         if (requestParamsCopy.containsKey(FilterParameter.TAG_NAME)) {
