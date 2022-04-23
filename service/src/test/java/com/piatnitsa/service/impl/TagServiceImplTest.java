@@ -1,7 +1,6 @@
 package com.piatnitsa.service.impl;
 
 import com.piatnitsa.dao.TagDao;
-import com.piatnitsa.dao.impl.TagDaoImpl;
 import com.piatnitsa.entity.Tag;
 import com.piatnitsa.exception.DaoException;
 import com.piatnitsa.exception.IncorrectParameterException;
@@ -36,39 +35,39 @@ public class TagServiceImplTest {
     private TagServiceImpl tagService;
 
     @Test
-    void getById_ExistedId() throws DaoException, IncorrectParameterException {
+    void getByIdTest_ExistedId() throws DaoException, IncorrectParameterException {
         Mockito.when(tagDao.getById(TAG_1.getId())).thenReturn(TAG_1);
         Tag actual = tagService.getById(TAG_1.getId());
         Assertions.assertEquals(TAG_1, actual);
     }
 
     @Test
-    void getById_NotExistedId() {
+    void getByIdTest_NotExistedId() {
         Assertions.assertThrows(IncorrectParameterException.class, () -> tagService.getById(NOT_EXISTED_ID));
     }
 
     @Test
-    void removeById_ExistedId() {
+    void removeByIdTest_ExistedId() {
         Assertions.assertDoesNotThrow(() -> tagService.removeById(TAG_2.getId()));
     }
 
     @Test
-    void removeById_NotExistedId() {
+    void removeByIdTest_NotExistedId() {
         Assertions.assertThrows(IncorrectParameterException.class, () -> tagService.removeById(NOT_EXISTED_ID));
     }
 
     @Test
-    void insert_CorrectTagParam() {
+    void insertTest_CorrectTagParam() {
         Assertions.assertDoesNotThrow(() -> tagService.insert(NEW_TAG));
     }
 
     @Test
-    void insert_IncorrectTagParam() {
+    void insertTest_IncorrectTagParam() {
         Assertions.assertThrows(IncorrectParameterException.class, () -> tagService.insert(INCORRECT_TAG));
     }
 
     @Test
-    void getAll() throws DaoException {
+    void getAllTest() throws DaoException {
         List<Tag> expected = Arrays.asList(TAG_1, TAG_2, TAG_3, TAG_4, TAG_5);
         Mockito.when(tagDao.getAll()).thenReturn(expected);
         List<Tag> actual = tagService.getAll();
@@ -76,7 +75,7 @@ public class TagServiceImplTest {
     }
 
     @Test
-    void doFilter_CorrectParams() throws DaoException, IncorrectParameterException {
+    void doFilterTest_CorrectParams() throws DaoException, IncorrectParameterException {
         List<Tag> expected = Collections.singletonList(TAG_4);
         Map<String, String> params = new HashMap<>();
         params.put(FilterParameter.SORT_BY_TAG_NAME, ASCENDING);
@@ -87,7 +86,7 @@ public class TagServiceImplTest {
     }
 
     @Test
-    void doFilter_IncorrectParams() {
+    void doFilterTest_IncorrectParams() {
         Map<String, String> params = new HashMap<>();
         params.put(FilterParameter.SORT_BY_TAG_NAME, INCORRECT_SORT_PARAMETER);
         params.put(FilterParameter.TAG_NAME, TAG_5.getName());
