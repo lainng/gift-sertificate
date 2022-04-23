@@ -20,6 +20,7 @@ public class GiftCertificateValidator {
     private static final int MIN_DURATION = 1;
 
     public static void validate(GiftCertificate item) throws IncorrectParameterException {
+        checkIfEmpty(item);
         validateName(item.getName());
         validateDescription(item.getDescription());
         validatePrice(item.getPrice());
@@ -28,6 +29,8 @@ public class GiftCertificateValidator {
     }
 
     public static void validateForUpdate(GiftCertificate item) throws IncorrectParameterException {
+        checkIfEmpty(item);
+
         if (item.getName() != null) {
             validateName(item.getName());
         }
@@ -74,6 +77,16 @@ public class GiftCertificateValidator {
     private static void validateDuration(int duration) throws IncorrectParameterException {
         if (duration < MIN_DURATION || duration > MAX_DURATION) {
             throw new IncorrectParameterException(IncorrectParameterMessageCodes.BAD_GIFT_CERTIFICATE_DURATION);
+        }
+    }
+
+    private static void checkIfEmpty(GiftCertificate item) throws IncorrectParameterException {
+        if (item.getName() == null
+                && item.getDescription() == null
+                && item.getPrice() == null
+                && item.getDuration() < MIN_DURATION
+                && item.getTags() == null) {
+            throw new IncorrectParameterException(IncorrectParameterMessageCodes.EMPTY_CERTIFICATE);
         }
     }
 }
