@@ -5,6 +5,7 @@ package com.piatnitsa.entity;
  *
  * @author Vlad Piatnitsa
  * @version 1.0
+ * @see GiftCertificate
  */
 public class GiftCertificateColumn {
     public static final String ID = "id";

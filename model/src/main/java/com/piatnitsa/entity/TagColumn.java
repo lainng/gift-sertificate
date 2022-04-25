@@ -5,6 +5,7 @@ package com.piatnitsa.entity;
  *
  * @author Vlad Piatnitsa
  * @version 1.0
+ * @see Tag
  */
 public class TagColumn {
     public static final String ID = "id";
