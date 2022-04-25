@@ -13,6 +13,12 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 
+/**
+ * This class contains spring configuration for DAO subproject.
+ *
+ * @author Vlad Piatnitsa
+ * @version 1.0
+ */
 @Configuration
 @PropertySource("classpath:db.properties")
 @EnableTransactionManagement

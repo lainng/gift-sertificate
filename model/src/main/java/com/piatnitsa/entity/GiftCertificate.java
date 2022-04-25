@@ -4,6 +4,12 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * This class represents gift certificate entity.
+ *
+ * @author Vlad Piatnitsa
+ * @version 1.0
+ */
 public class GiftCertificate {
     private long id;
     private String name;

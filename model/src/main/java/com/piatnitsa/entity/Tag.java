@@ -2,6 +2,12 @@ package com.piatnitsa.entity;
 
 import java.util.Objects;
 
+/**
+ * This class represents tag entity.
+ *
+ * @author Vlad Piatnitsa
+ * @version 1.0
+ */
 public class Tag {
     private long id;
     private String name;
@@ -49,9 +55,10 @@ public class Tag {
 
     @Override
     public String toString() {
-        return "Tag{" +
-                "id=" + id +
-                ",\n name='" + name + '\'' +
-                '}';
+        StringBuilder result = new StringBuilder("Tag{");
+        result.append("id=").append(id);
+        result.append(", name='").append(name).append('\'');
+        result.append('}');
+        return result.toString();
     }
 }

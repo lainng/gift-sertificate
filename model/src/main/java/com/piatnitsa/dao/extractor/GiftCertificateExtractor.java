@@ -11,6 +11,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class is an implementation of the {@link ResultSetExtractor} interface
+ * and is designed to work with a <code>gift_certificate</code> table to display ResultSet rows for each row.
+ *
+ * @author Vlad Piatnitsa
+ * @version 1.0
+ */
 @Component
 public class GiftCertificateExtractor implements ResultSetExtractor<List<GiftCertificate>> {
     @Override

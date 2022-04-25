@@ -11,6 +11,12 @@ import java.util.Set;
 
 import static com.piatnitsa.dao.SortingParameter.*;
 
+/**
+ * This class designed to create a selection condition.
+ *
+ * @author Vlad Piatnitsa
+ * @version 1.0
+ */
 @Component
 public class QueryBuilder {
 

@@ -6,6 +6,12 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * This class intended for extracting fields of {@link GiftCertificate}.
+ *
+ * @author Vlad Piatnitsa
+ * @version 1.0
+ */
 @Component
 public class GiftCertificateFieldExtractor {
 

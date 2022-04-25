@@ -5,6 +5,13 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 
 import java.util.List;
 
+/**
+ * This class represents basic tools for work with database tables.
+ * @param <T> type of entity.
+ *
+ * @author Vlad Piatnitsa
+ * @version 1.0
+ */
 public abstract class AbstractDao<T> {
     protected final JdbcTemplate jdbcTemplate;
     protected final ResultSetExtractor<List<T>> resultSetExtractor;
