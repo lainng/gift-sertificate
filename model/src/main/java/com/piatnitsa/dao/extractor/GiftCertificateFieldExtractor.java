@@ -15,6 +15,11 @@ import java.util.Map;
 @Component
 public class GiftCertificateFieldExtractor {
 
+    /**
+     * Extracts {@link GiftCertificate} fields values into {@link HashMap}.
+     * @param certificate entity that fields will be extracted.
+     * @return {@link HashMap} that contains extracted fields.
+     */
     public Map<String, String> extractData(GiftCertificate certificate) {
         Map<String, String> fields = new HashMap<>();
 
