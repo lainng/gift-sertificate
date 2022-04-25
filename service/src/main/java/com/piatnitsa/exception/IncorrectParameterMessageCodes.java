@@ -1,5 +1,12 @@
 package com.piatnitsa.exception;
 
+/**
+ * This class presents keys by which messages will be taken from properties files.
+ *
+ * @author Vlad Piatnitsa
+ * @version 1.0
+ * @see IncorrectParameterException
+ */
 public final class IncorrectParameterMessageCodes {
     public static final String BAD_TAG_FILTER_PARAMETER = "40001";
     public static final String BAD_GIFT_CERTIFICATE_FILTER_PARAMETER = "40002";

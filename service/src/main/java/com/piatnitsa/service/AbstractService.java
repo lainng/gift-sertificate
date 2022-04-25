@@ -7,6 +7,13 @@ import com.piatnitsa.validator.IdentifiableValidator;
 
 import java.util.List;
 
+/**
+ * This class is implementation of interface {@link CRDService} and is designed for basic work with objects.
+ * @param <T> type of entity.
+ *
+ * @author Vlad Piatnitsa
+ * @version 1.0
+ */
 public abstract class AbstractService<T> implements CRDService<T> {
     private final CRDDao<T> dao;
 
