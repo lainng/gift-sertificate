@@ -17,7 +17,7 @@ public interface TagDao extends CRDDao<Tag>{
     /**
      * Retrieves an {@link Tag} entity by its name.
      * @param name entity name.
-     * @return an {@link Tag} entity
+     * @return an {@link Tag} entity.
      * @throws DaoException if entity with specified name not existed.
      */
     Tag getByName(String name) throws DaoException;
@@ -26,7 +26,7 @@ public interface TagDao extends CRDDao<Tag>{
      * Method for getting a list of {@link Tag} by specific parameters.
      * @param params request parameters from URL.
      * @return {@link List} of {@link Tag}.
-     * @throws DaoException if list of {@link Tag} is empty.
+     * @throws DaoException if entities by specified parameters not found.
      */
     List<Tag> getWithFilter(Map<String, String> params) throws DaoException;
 }

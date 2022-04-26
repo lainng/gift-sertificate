@@ -18,7 +18,7 @@ public interface GiftCertificateDao extends CRUDDao<GiftCertificate> {
      * Method for getting a list of {@link GiftCertificate} by specific parameters.
      * @param params request parameters from URL.
      * @return {@link List} of {@link GiftCertificate}.
-     * @throws DaoException if list of {@link GiftCertificate} is empty.
+     * @throws DaoException if entities by specified parameters not found.
      */
     List<GiftCertificate> getWithFilter(Map<String, String> params) throws DaoException;
 }
