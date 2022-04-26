@@ -12,7 +12,7 @@ import java.util.Set;
 import static com.piatnitsa.dao.SortingParameter.*;
 
 /**
- * This class designed to create a selection condition.
+ * This class is designed to create a selection condition in SQL queries.
  *
  * @author Vlad Piatnitsa
  * @version 1.0
@@ -20,6 +20,13 @@ import static com.piatnitsa.dao.SortingParameter.*;
 @Component
 public class QueryBuilder {
 
+    /**
+     * Builds a query with filter parameters.
+     * @param basicQuery basic query that contains DML command and table name.
+     * @param filterParams parameters by which the selection is filtered.
+     * @return a string SQL query.
+     * @throws DaoException if parameters contain incorrect filter name.
+     */
     public String buildQueryWithFilters(String basicQuery, Map<String, String> filterParams) throws DaoException {
         StringBuilder query = new StringBuilder(basicQuery);
         for (Map.Entry<String, String> entry : filterParams.entrySet()) {
@@ -49,6 +56,12 @@ public class QueryBuilder {
         return query.toString();
     }
 
+    /**
+     * Builds a query with updated parameters.
+     * @param basicQuery basic query that contains DML command and table name.
+     * @param updatableParams updated parameters.
+     * @return a string SQL query.
+     */
     public String buildUpdateQuery(String basicQuery, Map<String, String> updatableParams) {
         StringBuilder updateQuery = new StringBuilder(basicQuery);
 
