@@ -15,7 +15,7 @@ public interface CRDDao<T> {
 
     /**
      * Retrieves a {@link T} object by its ID.
-     * @param id The ID of the object.
+     * @param id An ID of the object.
      * @return A {@link T} object.
      * @throws DaoException if {@link T} object not found.
      */
@@ -24,21 +24,21 @@ public interface CRDDao<T> {
     /**
      * Retrieves a {@link List} of {@link T} objects.
      * @return A {@link List} of {@link T} objects.
-     * @throws DaoException if {@link List} of {@link T} objects is empty.
+     * @throws DaoException if {@link T} entities are not found.
      */
     List<T> getAll() throws DaoException;
 
     /**
      * Method for saving an {@link T} entity.
-     * @param item {@link T} entity to save.
+     * @param item an {@link T} entity to save.
      * @throws DaoException if errors occurred while saving.
      */
     void insert(T item) throws DaoException;
 
     /**
      * Removes an {@link T} entity from data source by its ID.
-     * @param id The ID of {@link T} entity.
-     * @throws DaoException if entity with specified ID not existed.
+     * @param id an ID of {@link T} entity.
+     * @throws DaoException if the {@link T} entity with specified ID not existed.
      */
     void removeById(long id) throws DaoException;
 }
