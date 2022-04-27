@@ -4,6 +4,12 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
+/**
+ * This class contains Spring configuration for {@link DispatcherServlet}.
+ * @author Vlad Piatnitsa
+ * @version 1.0
+ * @see DispatcherServlet
+ */
 public class SpringDispatcher extends AbstractAnnotationConfigDispatcherServletInitializer {
     @Override
     protected Class<?>[] getRootConfigClasses() {
