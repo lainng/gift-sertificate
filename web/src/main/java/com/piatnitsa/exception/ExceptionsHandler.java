@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.piatnitsa.config.language.ExceptionMessageTranslator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -45,7 +46,8 @@ public class ExceptionsHandler {
 
     @ExceptionHandler({
             MethodArgumentTypeMismatchException.class,
-            JsonProcessingException.class
+            JsonProcessingException.class,
+            HttpMessageNotReadableException.class
     })
     public final ResponseEntity<ErrorResponse> handleBadRequestExceptions() {
         ErrorResponse errorResponse = new ErrorResponse();
