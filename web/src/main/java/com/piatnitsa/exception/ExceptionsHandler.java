@@ -10,6 +10,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
+/**
+ * This class presents entity which will be returned from controller in case generating exceptions.
+ * @author Vlad Piatnitsa
+ * @version 1.0
+ */
 @RestControllerAdvice
 public class ExceptionsHandler {
 
