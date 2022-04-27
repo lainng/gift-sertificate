@@ -8,6 +8,9 @@ import com.piatnitsa.exception.IncorrectParameterMessageCodes;
 import java.math.BigDecimal;
 import java.util.List;
 
+/**
+ * This class provides a validator for {@link GiftCertificate} entity.
+ */
 public class GiftCertificateValidator {
     private static final int MAX_LENGTH_NAME = 30;
     private static final int MIN_LENGTH_NAME = 3;
@@ -19,6 +22,11 @@ public class GiftCertificateValidator {
     private static final int MAX_DURATION = 366;
     private static final int MIN_DURATION = 1;
 
+    /**
+     * Validates all fields of an {@link GiftCertificate} entity.
+     * @param item an {@link GiftCertificate} entity for validating.
+     * @throws IncorrectParameterException if the entity contains incorrect field values.
+     */
     public static void validate(GiftCertificate item) throws IncorrectParameterException {
         checkIfEmpty(item);
         validateName(item.getName());
@@ -28,6 +36,11 @@ public class GiftCertificateValidator {
         validateListOfTags(item.getTags());
     }
 
+    /**
+     * Validates exists fields of an {@link GiftCertificate} entity. If some fields do not contain values, validation is not interrupted.
+     * @param item an {@link GiftCertificate} entity for validating.
+     * @throws IncorrectParameterException if the entity contains incorrect field values.
+     */
     public static void validateForUpdate(GiftCertificate item) throws IncorrectParameterException {
         checkIfEmpty(item);
 
@@ -46,6 +59,11 @@ public class GiftCertificateValidator {
         validateListOfTags(item.getTags());
     }
 
+    /**
+     * Validates exist tags of {@link GiftCertificate} entity.
+     * @param tags a {@link List} of {@link Tag}.
+     * @throws IncorrectParameterException if some tag has incorrect name.
+     */
     public static void validateListOfTags(List<Tag> tags) throws IncorrectParameterException {
         if (tags == null) return;
         for (Tag tag : tags) {
