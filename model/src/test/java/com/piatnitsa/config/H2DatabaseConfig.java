@@ -13,6 +13,11 @@ import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 
 import javax.sql.DataSource;
 
+/**
+ * This class contains Spring configuration for H2 database.
+ * @author Vlad Piatnitsa
+ * @version 1.0
+ */
 @Configuration
 @ComponentScan("com.piatnitsa")
 @PropertySource("classpath:h2.properties")
