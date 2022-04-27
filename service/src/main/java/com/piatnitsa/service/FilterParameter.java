@@ -2,6 +2,8 @@ package com.piatnitsa.service;
 
 /**
  * This class represents entity filter names.
+ * @author Vlad Piatnitsa
+ * @version 1.0
  */
 public final class FilterParameter {
     public static final String TAG_NAME = "tag_name";

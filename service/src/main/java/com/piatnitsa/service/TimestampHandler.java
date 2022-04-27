@@ -3,7 +3,10 @@ package com.piatnitsa.service;
 import java.time.LocalDateTime;
 
 /**
- * This class represents the time handler needed to update the timestamp of the {@link com.piatnitsa.entity.GiftCertificate}.
+ * This class represents the time handler needed to update
+ * the timestamp of the {@link com.piatnitsa.entity.GiftCertificate}.
+ * @author Vlad Piatnitsa
+ * @version 1.0
  */
 public class TimestampHandler {
 

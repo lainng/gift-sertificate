@@ -5,6 +5,8 @@ import com.piatnitsa.exception.IncorrectParameterMessageCodes;
 
 /**
  * This class provides a validator for entity identifier.
+ * @author Vlad Piatnitsa
+ * @version 1.0
  */
 public class IdentifiableValidator {
 

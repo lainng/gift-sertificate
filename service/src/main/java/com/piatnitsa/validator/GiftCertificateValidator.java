@@ -10,6 +10,8 @@ import java.util.List;
 
 /**
  * This class provides a validator for {@link GiftCertificate} entity.
+ * @author Vlad Piatnitsa
+ * @version 1.0
  */
 public class GiftCertificateValidator {
     private static final int MAX_LENGTH_NAME = 30;

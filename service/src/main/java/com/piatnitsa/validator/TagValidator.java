@@ -6,6 +6,8 @@ import com.piatnitsa.exception.IncorrectParameterMessageCodes;
 
 /**
  * This class provides a validator for {@link Tag} entity.
+ * @author Vlad Piatnitsa
+ * @version 1.0
  */
 public class TagValidator {
     private static final int MAX_LENGTH_NAME = 40;

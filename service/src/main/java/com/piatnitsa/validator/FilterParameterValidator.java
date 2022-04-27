@@ -5,6 +5,8 @@ import com.piatnitsa.exception.IncorrectParameterMessageCodes;
 
 /**
  * This class provides a validator for entity filter parameters.
+ * @author Vlad Piatnitsa
+ * @version 1.0
  */
 public class FilterParameterValidator {
     private static final String ASCENDING = "ASC";
