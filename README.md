@@ -1,7 +1,9 @@
 ## MJC school
 
 ### Module #2 REST API Basics
-This is the first module that includes a basic Spring Framework 'gift-certificate' application.
+This is the first module that includes a basic Spring Framework 'gift-certificate' application.  
+[Module #3](https://github.com/lainng/gift-certificate-boot) - REST API Advanced.  
+[Module #4](https://github.com/lainng/gift-certificate-security) - Authentication & Spring Security.
 
 ### *Task*
 Business requirements:  
